@@ -1,42 +1,44 @@
 package com.unq;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
-
 
 public class ParkingSystem {
-	
-	private ParkingSystem intstance;
-	private LocalDate star_time;
-	private LocalDate end_time;
-	private LocalDate price_per_hour;
-	private Map<String, Integer> credits;
-	private List<String> violations;
-	
-	public ParkingSystem() {
-		this.credits = new HashMap<String, Integer>();
-		this.violations = new ArrayList<String>();
-	
-	}
-	
-	public ParkingSystem getInstance() {
-		return this.intstance;
-		
-	}
-	
-	public void addViolation(String patent) {
-		this.violations.add(patent);
-	}
-	
-	public void finalizeAllCurrentParking() {
-		return;
-	}
-	
-	
 
+	private List<ParkingArea> areas;
+	private List<Violation> violations;
+
+	private static ParkingSystem instance;
+	private static final int START_TIME = 7;
+	private static final int END_TIME = 20;
+	private static final float PRICE_PER_HOUR = 40L;
+
+	private ParkingSystem() { }
+
+	private static ParkingSystem getInstance() {
+		if(instance == null){
+			instance = new ParkingSystem();
+		}
+
+		return instance;
+	}
+
+	public List<ParkingArea> getAreas() {
+		return areas;
+	}
+
+	public void setAreas(List<ParkingArea> areas) {
+		this.areas = areas;
+	}
+
+	public List<Violation> getViolations() {
+		return violations;
+	}
+
+	public void setViolations(List<Violation> violations) {
+		this.violations = violations;
+	}
+
+	public static void setInstance(ParkingSystem instance) {
+		ParkingSystem.instance = instance;
+	}
 }
