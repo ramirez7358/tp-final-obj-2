@@ -3,7 +3,7 @@ package com.unq;
 
 public class AppMobile {
 
-	public AppMobile(AlertManager alert) {
+	public AppMobile() {
 	
 	}
 	
