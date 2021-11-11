@@ -10,7 +10,7 @@ public class ParkingArea {
 		
 	}
 	
-	public Parking createParking(String patentg) {
+	public Parking createParking(String patent) {
 		return null;
 	}
 	
