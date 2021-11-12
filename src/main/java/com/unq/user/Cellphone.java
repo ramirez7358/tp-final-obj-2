@@ -1,8 +1,6 @@
 package com.unq.user;
 
-import com.unq.AppSEM;
-import com.unq.alert.AlertListener;
-import com.unq.alert.AlertType;
+import com.unq.app.sem.AppSEM;
 
 public class Cellphone {
 

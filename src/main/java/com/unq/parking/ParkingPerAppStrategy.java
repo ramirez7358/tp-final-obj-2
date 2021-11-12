@@ -1,4 +1,4 @@
-package com.unq;
+package com.unq.parking;
 
 public class ParkingPerAppStrategy {
 

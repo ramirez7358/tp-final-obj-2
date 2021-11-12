@@ -1,6 +1,8 @@
-package com.unq;
+package com.unq.app.sem;
 
 
+import com.unq.ParkingArea;
+import com.unq.ParkingSystem;
 import com.unq.alert.AlertManager;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
@@ -25,7 +27,7 @@ public class AppSEM {
 	}
 
 	public void startParking() {
-
+		currentArea.createParking(carAssociated.getPatent());
 	}
 
 	public void endParking() {

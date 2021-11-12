@@ -1,5 +1,7 @@
 package com.unq;
 
+import com.unq.app.inspector.Violation;
+
 import java.util.List;
 
 public class ParkingSystem {
@@ -14,7 +16,7 @@ public class ParkingSystem {
 
 	private ParkingSystem() { }
 
-	private static ParkingSystem getInstance() {
+	public static ParkingSystem getInstance() {
 		if(instance == null){
 			instance = new ParkingSystem();
 		}

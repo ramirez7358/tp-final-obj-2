@@ -1,4 +1,4 @@
-package com.unq;
+package com.unq.app.sem;
 
 import java.time.LocalDate;
 

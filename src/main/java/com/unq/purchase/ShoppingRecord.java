@@ -1,13 +1,23 @@
 package com.unq.purchase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShoppingRecord {
 
     private List<Purchase> purchases;
 
-    public ShoppingRecord(List<Purchase> purchases) {
-        this.purchases = purchases;
+    private static ShoppingRecord instance;
+
+    public static ShoppingRecord getInstance() {
+        if(instance == null) {
+            instance = new ShoppingRecord();
+        }
+        return instance;
+    }
+
+    private ShoppingRecord() {
+        this.purchases = new ArrayList<>();
     }
 
     public void addPurchase(Purchase purchase) {

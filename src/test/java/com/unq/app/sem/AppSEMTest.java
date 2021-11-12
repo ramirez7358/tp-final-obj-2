@@ -1,6 +1,5 @@
 package com.unq.app.sem;
 
-import com.unq.AppSEM;
 import com.unq.ParkingArea;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
