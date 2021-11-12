@@ -8,9 +8,9 @@ public class ParkingSystem {
 	private List<Violation> violations;
 
 	private static ParkingSystem instance;
-	private static final int START_TIME = 7;
-	private static final int END_TIME = 20;
-	private static final float PRICE_PER_HOUR = 40L;
+	public static final int START_TIME = 7;
+	public static final int END_TIME = 20;
+	public static final double PRICE_PER_HOUR = 40;
 
 	private ParkingSystem() { }
 
