@@ -3,6 +3,7 @@ package com.unq.app.sem;
 
 import com.unq.ParkingArea;
 import com.unq.ParkingSystem;
+import com.unq.TimeUtil;
 import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.exceptions.InsufficientBalanceException;
@@ -10,7 +11,6 @@ import com.unq.parking.Parking;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -20,6 +20,7 @@ public class AppSEM implements MovementSensor {
 	private Car carAssociated;
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
+	private TimeUtil timeUtil;
 
 	public AppSEM(Double balance, Cellphone cellphoneAssociated, Car carAssociated, ParkingArea currentArea) {
 		this.balance = balance;
@@ -27,6 +28,7 @@ public class AppSEM implements MovementSensor {
 		this.carAssociated = carAssociated;
 		this.currentArea = currentArea;
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
+		this.timeUtil = new TimeUtil();
 
 		alertManager.subscribe(AlertType.START_PARKING, cellphoneAssociated);
 		alertManager.subscribe(AlertType.END_PARKING, cellphoneAssociated);
@@ -37,7 +39,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public StartParkingResponse startParking() throws InsufficientBalanceException {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = timeUtil.now();
 
 		if(this.balance == 0) {
 			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
@@ -47,15 +49,12 @@ public class AppSEM implements MovementSensor {
 			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
 		}
 
-		LocalDateTime dateInitParking = LocalDateTime.now();
-		double estimatedEndTime = dateInitParking.getHour() + this.getMaxHours();
-
-		balance -= this.getMaxHours() * ParkingSystem.PRICE_PER_HOUR;
+		double estimatedEndTime = now.getHour() + this.getMaxHours();
 
 		currentArea.createParking(cellphoneAssociated.getPhoneNumber(), carAssociated.getPatent());
 
 		return StartParkingResponse.newBuilder()
-				.startHour(LocalDateTime.now())
+				.startHour(now)
 				.maxHour(estimatedEndTime >= 20 ? 20D : estimatedEndTime)
 				.build();
 	}
@@ -63,7 +62,7 @@ public class AppSEM implements MovementSensor {
 	public EndParkingResponse endParking() {
 		Parking parking = currentArea.removeParking(cellphoneAssociated.getPhoneNumber());
 
-		long minutes = ChronoUnit.MINUTES.between(parking.getCreationDateTime(), LocalDateTime.now());
+		long minutes = ChronoUnit.MINUTES.between(parking.getCreationDateTime(), timeUtil.now());
 
 		Duration duration = new Duration(
 				minutes / 60,
@@ -72,9 +71,11 @@ public class AppSEM implements MovementSensor {
 
 		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
 
+		balance -= cost;
+
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationDateTime())
-				.endHour(LocalDateTime.now())
+				.endHour(timeUtil.now())
 				.duration(duration)
 				.cost(cost)
 				.build();
@@ -118,6 +119,18 @@ public class AppSEM implements MovementSensor {
 
 	public void setAlertManager(AlertManager alertManager) {
 		this.alertManager = alertManager;
+	}
+
+	public void setCurrentArea(ParkingArea currentArea) {
+		this.currentArea = currentArea;
+	}
+
+	public TimeUtil getTimeUtil() {
+		return timeUtil;
+	}
+
+	public void setTimeUtil(TimeUtil timeUtil) {
+		this.timeUtil = timeUtil;
 	}
 
 	@Override

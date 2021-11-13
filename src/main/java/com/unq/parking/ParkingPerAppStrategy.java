@@ -1,5 +1,5 @@
 package com.unq.parking;
 
-public class ParkingPerAppStrategy {
+public class ParkingPerAppStrategy implements ParkingStrategy {
 
 }

@@ -1,8 +1,10 @@
 package com.unq.app.sem;
 
 import com.unq.ParkingArea;
+import com.unq.TimeUtil;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
+import com.unq.parking.ParkingPerAppStrategy;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
 import org.junit.jupiter.api.Assertions;
@@ -24,15 +26,14 @@ public class AppSEMTest {
     private static Cellphone cellphone;
     private static Car car;
     private static ParkingArea area;
-
-    @Mock
-    private LocalDateTime localDateTime;
+    private static TimeUtil timeUtil;
 
     @BeforeAll
     public static void setUp() {
         cellphone = mock(Cellphone.class);
         car = mock(Car.class);
         area = mock(ParkingArea.class);
+        timeUtil = mock(TimeUtil.class);
     }
 
     @Test
@@ -75,30 +76,45 @@ public class AppSEMTest {
         assertTrue(thrown.getMessage().contains("Insufficient balance. Parking not allowed."));
     }
 
-    /**
-     * @TODO Este test fallaria cuando estamos fuera de los horarios permitidos de parking
-     *  ¿Como mockeo la hora en la que estoy en este momento?
-     * */
-    @Disabled
     @Test()
     public void startParking() throws InsufficientBalanceException {
         AppSEM appSEM = new AppSEM(80D, cellphone, car, area);
-        LocalDateTime dateMock = LocalDateTime.of(2021, 12, 28, 12, 0, 0);
+        appSEM.setTimeUtil(timeUtil);
 
-        when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(null);
+        LocalDateTime dateMock = LocalDateTime.of(2021, 12, 28, 12, 0, 0);
+        Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), dateMock);
+
+        when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(parkingMock);
+        when(timeUtil.now()).thenReturn(dateMock);
 
         StartParkingResponse response = appSEM.startParking();
 
-        assertEquals(LocalDateTime.now().getHour(), response.getStartHour().getHour());
-        assertEquals(LocalDateTime.now().getMinute(), response.getStartHour().getMinute());
-        assertEquals(LocalDateTime.now().getHour() + 2, response.getMaxHour());
+        assertEquals(12, response.getStartHour().getHour());
+        assertEquals(0, response.getStartHour().getMinute());
+        assertEquals(14, response.getMaxHour());
     }
 
     @Test
-    public void test() {
-        long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), LocalDateTime.now().plusHours(2).plusMinutes(5));
+    public void endParking() {
+        AppSEM appSEM = new AppSEM(90D, cellphone, car, area);
+        appSEM.setTimeUtil(timeUtil);
 
-        System.out.println(minutes / 60);
+        LocalDateTime dateMock = LocalDateTime.of(2021, 12, 28, 18, 0, 0);
+        LocalDateTime startParkingDateTime = LocalDateTime.of(2021, 12, 28, 16, 0, 0);
+
+        Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), startParkingDateTime);
+
+        when(area.removeParking(Mockito.any())).thenReturn(parkingMock);
+        when(timeUtil.now()).thenReturn(dateMock);
+
+        EndParkingResponse response = appSEM.endParking();
+
+        assertEquals(startParkingDateTime, response.getStartHour());
+        assertEquals(dateMock, response.getEndHour());
+        assertEquals(80, response.getCost());
+        assertEquals(2, response.getDuration().getHours());
+        assertEquals(0, response.getDuration().getMinutes());
+        assertEquals(10, appSEM.getBalance());
     }
 
 }
