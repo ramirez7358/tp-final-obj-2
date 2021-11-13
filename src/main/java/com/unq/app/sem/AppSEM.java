@@ -6,11 +6,13 @@ import com.unq.ParkingSystem;
 import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.exceptions.InsufficientBalanceException;
+import com.unq.parking.Parking;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class AppSEM implements MovementSensor {
 	private Double balance;
@@ -50,7 +52,7 @@ public class AppSEM implements MovementSensor {
 
 		balance -= this.getMaxHours() * ParkingSystem.PRICE_PER_HOUR;
 
-		currentArea.createParking(carAssociated.getPatent());
+		currentArea.createParking(cellphoneAssociated.getPhoneNumber(), carAssociated.getPatent());
 
 		return StartParkingResponse.newBuilder()
 				.startHour(LocalDateTime.now())
@@ -58,8 +60,24 @@ public class AppSEM implements MovementSensor {
 				.build();
 	}
 
-	public void endParking() {
-		currentArea.removeParking(carAssociated.getPatent());
+	public EndParkingResponse endParking() {
+		Parking parking = currentArea.removeParking(cellphoneAssociated.getPhoneNumber());
+
+		long minutes = ChronoUnit.MINUTES.between(parking.getCreationDateTime(), LocalDateTime.now());
+
+		Duration duration = new Duration(
+				minutes / 60,
+				minutes % 60
+		);
+
+		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
+
+		return EndParkingResponse.newBuilder()
+				.startHour(parking.getCreationDateTime())
+				.endHour(LocalDateTime.now())
+				.duration(duration)
+				.cost(cost)
+				.build();
 	}
 
 	public void updateCurrentArea(ParkingArea currentArea) {

@@ -7,12 +7,14 @@ import com.unq.user.Car;
 import com.unq.user.Cellphone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -77,20 +79,26 @@ public class AppSEMTest {
      * @TODO Este test fallaria cuando estamos fuera de los horarios permitidos de parking
      *  ¿Como mockeo la hora en la que estoy en este momento?
      * */
+    @Disabled
     @Test()
     public void startParking() throws InsufficientBalanceException {
         AppSEM appSEM = new AppSEM(80D, cellphone, car, area);
-
-        Parking parking = new Parking();
         LocalDateTime dateMock = LocalDateTime.of(2021, 12, 28, 12, 0, 0);
 
-        when(area.createParking(Mockito.any())).thenReturn(parking);
+        when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(null);
 
         StartParkingResponse response = appSEM.startParking();
 
         assertEquals(LocalDateTime.now().getHour(), response.getStartHour().getHour());
         assertEquals(LocalDateTime.now().getMinute(), response.getStartHour().getMinute());
         assertEquals(LocalDateTime.now().getHour() + 2, response.getMaxHour());
+    }
+
+    @Test
+    public void test() {
+        long minutes = ChronoUnit.MINUTES.between(LocalDateTime.now(), LocalDateTime.now().plusHours(2).plusMinutes(5));
+
+        System.out.println(minutes / 60);
     }
 
 }

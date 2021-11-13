@@ -13,12 +13,12 @@ public class ParkingArea {
 		
 	}
 	
-	public Parking createParking(String patent) {
+	public Parking createParking(String phoneNumber, String patent) {
 		return null;
 	}
 	
-	public void removeParking(String patent) {
-		return;
+	public Parking removeParking(String patent) {
+		return null;
 	}
 	
 	
