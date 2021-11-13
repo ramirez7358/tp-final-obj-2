@@ -1,19 +1,30 @@
 package com.unq.app.sem;
 
 import com.unq.ParkingArea;
+import com.unq.exceptions.InsufficientBalanceException;
+import com.unq.parking.Parking;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class AppSEMTest {
 
     private static Cellphone cellphone;
     private static Car car;
     private static ParkingArea area;
+
+    @Mock
+    private LocalDateTime localDateTime;
 
     @BeforeAll
     public static void setUp() {
@@ -47,6 +58,39 @@ public class AppSEMTest {
         double maxHours = appSEM.getMaxHours();
 
         Assertions.assertEquals(0.5, maxHours);
+    }
+
+    @Test
+    public void startParkingInsufficientBalance() {
+        AppSEM appSEM = new AppSEM(0D, cellphone, car, area);
+
+        InsufficientBalanceException thrown = assertThrows(
+                InsufficientBalanceException.class,
+                appSEM::startParking,
+                "Expected doThing() to throw, but it didn't"
+        );
+
+        assertTrue(thrown.getMessage().contains("Insufficient balance. Parking not allowed."));
+    }
+
+    /**
+     * @TODO Este test fallaria cuando estamos fuera de los horarios permitidos de parking
+     *  ¿Como mockeo la hora en la que estoy en este momento?
+     * */
+    @Test()
+    public void startParking() throws InsufficientBalanceException {
+        AppSEM appSEM = new AppSEM(80D, cellphone, car, area);
+
+        Parking parking = new Parking();
+        LocalDateTime dateMock = LocalDateTime.of(2021, 12, 28, 12, 0, 0);
+
+        when(area.createParking(Mockito.any())).thenReturn(parking);
+
+        StartParkingResponse response = appSEM.startParking();
+
+        assertEquals(LocalDateTime.now().getHour(), response.getStartHour().getHour());
+        assertEquals(LocalDateTime.now().getMinute(), response.getStartHour().getMinute());
+        assertEquals(LocalDateTime.now().getHour() + 2, response.getMaxHour());
     }
 
 }

@@ -17,7 +17,7 @@ public class ParkingArea {
 		return null;
 	}
 	
-	public void removeParking(Parking parking) {
+	public void removeParking(String patent) {
 		return;
 	}
 	

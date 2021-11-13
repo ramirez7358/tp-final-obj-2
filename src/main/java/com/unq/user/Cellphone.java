@@ -1,8 +1,10 @@
 package com.unq.user;
 
+import com.unq.alert.AlertListener;
+import com.unq.alert.AlertType;
 import com.unq.app.sem.AppSEM;
 
-public class Cellphone {
+public class Cellphone implements AlertListener {
 
     private String phoneNumber;
 
@@ -16,5 +18,10 @@ public class Cellphone {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @Override
+    public void update(AlertType alertType, String data) {
+
     }
 }
