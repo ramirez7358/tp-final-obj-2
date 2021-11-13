@@ -6,8 +6,10 @@ import com.unq.ParkingSystem;
 import com.unq.TimeUtil;
 import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
+import com.unq.app.sem.mode.ParkingModeStrategy;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
+import com.unq.parking.ParkingStrategy;
 import com.unq.user.Car;
 import com.unq.user.Cellphone;
 
@@ -20,14 +22,17 @@ public class AppSEM implements MovementSensor {
 	private Car carAssociated;
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
+	private ParkingModeStrategy parkingModeStrategy;
 	private TimeUtil timeUtil;
 
-	public AppSEM(Double balance, Cellphone cellphoneAssociated, Car carAssociated, ParkingArea currentArea) {
+	public AppSEM(Double balance, Cellphone cellphoneAssociated, Car carAssociated, ParkingArea currentArea,
+				  ParkingModeStrategy parkingModeStrategy) {
 		this.balance = balance;
 		this.cellphoneAssociated = cellphoneAssociated;
 		this.carAssociated = carAssociated;
 		this.currentArea = currentArea;
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
+		this.parkingModeStrategy = parkingModeStrategy;
 		this.timeUtil = new TimeUtil();
 
 		alertManager.subscribe(AlertType.START_PARKING, cellphoneAssociated);
@@ -39,6 +44,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public StartParkingResponse startParking() throws InsufficientBalanceException {
+
 		LocalDateTime now = timeUtil.now();
 
 		if(this.balance == 0) {
@@ -131,6 +137,14 @@ public class AppSEM implements MovementSensor {
 
 	public void setTimeUtil(TimeUtil timeUtil) {
 		this.timeUtil = timeUtil;
+	}
+
+	public ParkingModeStrategy getParkingModeStrategy() {
+		return parkingModeStrategy;
+	}
+
+	public void setParkingModeStrategy(ParkingModeStrategy parkingModeStrategy) {
+		this.parkingModeStrategy = parkingModeStrategy;
 	}
 
 	@Override
