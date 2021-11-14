@@ -6,48 +6,47 @@ import com.unq.ParkingSystem;
 import com.unq.TimeUtil;
 import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
-import com.unq.app.sem.mode.ParkingModeStrategy;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
-import com.unq.parking.ParkingStrategy;
-import com.unq.user.Car;
-import com.unq.user.Cellphone;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class AppSEM implements MovementSensor {
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
-	private ParkingModeStrategy parkingModeStrategy;
+	private ParkingMode parkingMode;
 	private TimeUtil timeUtil;
+	private String phoneNumber;
+	private String patentCarAssociated;
 
-	public AppSEM(ParkingModeStrategy parkingModeStrategy) {
+	public AppSEM(ParkingMode parkingMode, String phoneNumber, String patentCarAssociated) {
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
-		this.parkingModeStrategy = parkingModeStrategy;
+		this.parkingMode = parkingMode;
+		this.phoneNumber = phoneNumber;
+		this.patentCarAssociated = patentCarAssociated;
 		this.timeUtil = new TimeUtil();
 	}
 
-	public double getMaxHours() {
-		int balance = 2; //hardcode
+	public double getMaxHours(String phoneNumber) {
+		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
 		return balance / ParkingSystem.PRICE_PER_HOUR;
 	}
 
-	public StartParkingResponse startParking(String patent, String phoneNumber) throws InsufficientBalanceException {
-		LocalDateTime now = timeUtil.now();
-		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber); // hardcode
+	public StartParkingResponse startParking() {
+		LocalTime now = timeUtil.now();
+		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
 
-		if(balance == 0) {
-			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
+		try {
+			this.validateBalance(balance);
+			this.validateHour(now);
+		} catch (InsufficientBalanceException e) {
+			System.out.println(e.getMessage());
 		}
 
-		if(now.getHour() < 8 || now.getHour() > 20) {
-			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
-		}
+		double estimatedEndTime = now.getHour() + this.getMaxHours(phoneNumber);
 
-		double estimatedEndTime = now.getHour() + this.getMaxHours();
-
-		currentArea.createParking(patent, phoneNumber);
+		currentArea.createParking(patentCarAssociated, phoneNumber);
 
 		return StartParkingResponse.newBuilder()
 				.startHour(now)
@@ -55,11 +54,11 @@ public class AppSEM implements MovementSensor {
 				.build();
 	}
 
-	public EndParkingResponse endParking(String phoneNumber) {
+	public EndParkingResponse endParking() {
 		// Al remover el parking hay que descontar credito
 		Parking parking = currentArea.removeParking(phoneNumber);
 
-		long minutes = ChronoUnit.MINUTES.between(parking.getCreationDateTime(), timeUtil.now());
+		long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.now());
 
 		Duration duration = new Duration(
 				minutes / 60,
@@ -69,20 +68,86 @@ public class AppSEM implements MovementSensor {
 		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
 
 		return EndParkingResponse.newBuilder()
-				.startHour(parking.getCreationDateTime())
+				.startHour(parking.getCreationTime())
 				.endHour(timeUtil.now())
 				.duration(duration)
 				.cost(cost)
 				.build();
 	}
 
+	public ParkingArea getCurrentArea() {
+		return currentArea;
+	}
+
+	public void setCurrentArea(ParkingArea currentArea) {
+		this.currentArea = currentArea;
+	}
+
+	public AlertManager getAlertManager() {
+		return alertManager;
+	}
+
+	public void setAlertManager(AlertManager alertManager) {
+		this.alertManager = alertManager;
+	}
+
+	public ParkingMode getParkingMode() {
+		return parkingMode;
+	}
+
+	public void setParkingMode(ParkingMode parkingMode) {
+		this.parkingMode = parkingMode;
+	}
+
+	public TimeUtil getTimeUtil() {
+		return timeUtil;
+	}
+
+	public void setTimeUtil(TimeUtil timeUtil) {
+		this.timeUtil = timeUtil;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getPatentCarAssociated() {
+		return patentCarAssociated;
+	}
+
+	public void setPatentCarAssociated(String patentCarAssociated) {
+		this.patentCarAssociated = patentCarAssociated;
+	}
+
+	private void validateBalance(Double balance) throws InsufficientBalanceException {
+		if(balance == 0) {
+			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
+		}
+	}
+
+	private void validateHour(LocalTime time) throws InsufficientBalanceException {
+		if(time.getHour() < 8 || time.getHour() > 20) {
+			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
+		}
+	}
+
 	@Override
 	public void driving() {
-		alertManager.notify(AlertType.END_PARKING, "Alert start parking");
+		if(currentArea.existParking(patentCarAssociated) && this.parkingMode == ParkingMode.AUTOMATIC) {
+			this.endParking();
+			alertManager.notify(AlertType.END_PARKING, "The end of parking has been triggered automatically.");
+		}
 	}
 
 	@Override
 	public void walking() {
-		alertManager.notify(AlertType.START_PARKING, "Alert end parking");
+		if(this.parkingMode == ParkingMode.AUTOMATIC && !currentArea.existParking(patentCarAssociated)) {
+			this.startParking();
+			alertManager.notify(AlertType.START_PARKING, "The parking start has been triggered automatically.");
+		}
 	}
 }

@@ -1,16 +1,17 @@
 package com.unq.parking;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Parking {
     private String carPatent;
     private ParkingStrategy parkingStrategy;
-    private LocalDateTime creationDateTime;
+    private LocalTime creationTime;
 
-    public Parking(String carPatent, ParkingStrategy parkingStrategy, LocalDateTime creationDateTime) {
+    public Parking(String carPatent, ParkingStrategy parkingStrategy, LocalTime creationTime) {
         this.carPatent = carPatent;
         this.parkingStrategy = parkingStrategy;
-        this.creationDateTime = creationDateTime;
+        this.creationTime = creationTime;
     }
 
     public String getCarPatent() {
@@ -29,11 +30,11 @@ public class Parking {
         this.parkingStrategy = parkingStrategy;
     }
 
-    public LocalDateTime getCreationDateTime() {
-        return creationDateTime;
+    public LocalTime getCreationTime() {
+        return creationTime;
     }
 
-    public void setCreationDateTime(LocalDateTime creationDateTime) {
-        this.creationDateTime = creationDateTime;
+    public void setCreationTime(LocalTime creationTime) {
+        this.creationTime = creationTime;
     }
 }

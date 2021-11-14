@@ -1,11 +1,11 @@
 package com.unq;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class TimeUtil {
 
-    public LocalDateTime now() {
-        return LocalDateTime.now();
+    public LocalTime now() {
+        return LocalTime.now();
     }
 
 }

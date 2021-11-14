@@ -25,6 +25,11 @@ public class ParkingArea {
 		return null;
 	}
 
+	public Boolean existParking(String patent) {
+		// Devuelve si hay un estacionamiento vigente o no
+		return null;
+	}
+
 	public List<Parking> getParkings() {
 		return parkings;
 	}

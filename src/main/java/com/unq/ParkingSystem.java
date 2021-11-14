@@ -33,7 +33,7 @@ public class ParkingSystem {
 	}
 
 	public Double getBalance(String phoneNumber) {
-		return this.balances.get(phoneNumber);
+		return this.balances.getOrDefault(phoneNumber, 0D);
 	}
 
 	public void increaseBalance(String phoneNumber, Double amount) {
@@ -53,8 +53,6 @@ public class ParkingSystem {
 			throw new Exception("The user has no registered credit.");
 		}
 	}
-
-
 
 	public Map<String, Double> getBalances() {
 		return balances;

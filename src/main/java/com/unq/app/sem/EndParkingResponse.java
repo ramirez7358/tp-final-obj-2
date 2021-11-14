@@ -1,12 +1,11 @@
 package com.unq.app.sem;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class EndParkingResponse {
 	
-	private LocalDateTime startHour;
-	private LocalDateTime endHour;
+	private LocalTime startHour;
+	private LocalTime endHour;
 	private Duration duration;
 	private Double cost;
 	
@@ -21,19 +20,19 @@ public class EndParkingResponse {
 		return new Builder();
 	}
 
-	public LocalDateTime getStartHour() {
+	public LocalTime getStartHour() {
 		return startHour;
 	}
 
-	public void setStartHour(LocalDateTime startHour) {
+	public void setStartHour(LocalTime startHour) {
 		this.startHour = startHour;
 	}
 
-	public LocalDateTime getEndHour() {
+	public LocalTime getEndHour() {
 		return endHour;
 	}
 
-	public void setEndHour(LocalDateTime endHour) {
+	public void setEndHour(LocalTime endHour) {
 		this.endHour = endHour;
 	}
 
@@ -54,17 +53,17 @@ public class EndParkingResponse {
 	}
 
 	public static class Builder {
-		private LocalDateTime startHour;
-		private LocalDateTime endHour;
+		private LocalTime startHour;
+		private LocalTime endHour;
 		private Duration duration;
 		private Double cost;
 
-		public Builder startHour(LocalDateTime startHour) {
+		public Builder startHour(LocalTime startHour) {
 			this.startHour = startHour;
 			return this;
 		}
 
-		public Builder endHour(LocalDateTime endHour) {
+		public Builder endHour(LocalTime endHour) {
 			this.endHour = endHour;
 			return this;
 		}

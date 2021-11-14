@@ -1,14 +1,14 @@
 package com.unq.app.sem;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class StartParkingResponse {
 	
-	private LocalDateTime startHour;
+	private LocalTime startHour;
 	private Double maxHour;
 	
-	public StartParkingResponse(LocalDateTime startHour, Double maxHour) {
+	public StartParkingResponse(LocalTime startHour, Double maxHour) {
 		this.startHour = startHour;
 		this.maxHour = maxHour;
 	}
@@ -22,11 +22,11 @@ public class StartParkingResponse {
 		return new Builder();
 	}
 
-	public LocalDateTime getStartHour() {
+	public LocalTime getStartHour() {
 		return startHour;
 	}
 
-	public void setStartHour(LocalDateTime startHour) {
+	public void setStartHour(LocalTime startHour) {
 		this.startHour = startHour;
 	}
 
@@ -39,10 +39,10 @@ public class StartParkingResponse {
 	}
 
 	public static class Builder {
-		private LocalDateTime startHour;
+		private LocalTime startHour;
 		private Double maxHour;
 
-		public Builder startHour(LocalDateTime startHour) {
+		public Builder startHour(LocalTime startHour) {
 			this.startHour = startHour;
 			return this;
 		}
