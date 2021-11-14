@@ -34,6 +34,16 @@ public class ParkingArea {
 		return parkings.remove(phoneNumber);
 	}
 
+	public Parking getParkingByPatent(String patent) throws Exception {
+		Optional<Parking> parking = parkings.values().stream().filter(p -> p.getCarPatent().equals(patent)).findAny();
+
+		if(parking.isPresent()) {
+			return parking.get();
+		}else {
+			throw new Exception(String.format("No parking associated with the patent was found: %s", patent));
+		}
+	}
+
 	public Boolean existParking(String phoneNumber) {
 		return parkings.get(phoneNumber) != null;
 	}

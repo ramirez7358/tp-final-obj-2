@@ -14,6 +14,10 @@ public class Parking {
         this.creationTime = creationTime;
     }
 
+    public Boolean inForce() {
+        return true;
+    }
+
     public String getCarPatent() {
         return carPatent;
     }
