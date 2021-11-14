@@ -10,12 +10,11 @@ public class HoursPurchase extends Purchase{
     private Integer quantity;
     private String patent;
 
-    public HoursPurchase(BigInteger id,
-                         ParkingArea area,
+    public HoursPurchase(ParkingArea area,
                          LocalDateTime date,
                          Integer quantity,
                          String patent) {
-        super(id, area, date);
+        super(area, date);
         this.quantity = quantity;
         this.patent = patent;
     }

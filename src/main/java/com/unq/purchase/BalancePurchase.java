@@ -7,24 +7,23 @@ import java.time.LocalDateTime;
 
 public class BalancePurchase extends Purchase{
 
-    private Float amount;
+    private Double amount;
     private String phoneNumber;
 
-    public BalancePurchase(BigInteger id,
-                           ParkingArea area,
+    public BalancePurchase(ParkingArea area,
                            LocalDateTime date,
-                           Float amount,
+                           Double amount,
                            String phoneNumber) {
-        super(id, area, date);
+        super(area, date);
         this.amount = amount;
         this.phoneNumber = phoneNumber;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

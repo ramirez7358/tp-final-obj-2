@@ -75,7 +75,7 @@ public class AppSEMTest {
         Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), timeMock);
 
         when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(parkingMock);
-        when(timeUtil.now()).thenReturn(timeMock);
+        when(timeUtil.nowTime()).thenReturn(timeMock);
 
         StartParkingResponse response = appSEM.startParking("MBZ912", "1102931312");
 
@@ -94,7 +94,7 @@ public class AppSEMTest {
         Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), startParkingDateTime);
 
         when(area.removeParking(Mockito.any())).thenReturn(parkingMock);
-        when(timeUtil.now()).thenReturn(dateMock);
+        when(timeUtil.nowTime()).thenReturn(dateMock);
 
         EndParkingResponse response = appSEM.endParking("1102931312");
 

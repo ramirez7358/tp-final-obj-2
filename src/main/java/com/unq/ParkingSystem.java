@@ -33,6 +33,10 @@ public class ParkingSystem {
 		return instance;
 	}
 
+	public void registryViolation(Violation violation) {
+		violations.add(violation);
+	}
+
 	public Double getBalance(String phoneNumber) {
 		return this.balances.getOrDefault(phoneNumber, 0D);
 	}

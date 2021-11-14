@@ -1,12 +1,9 @@
 package com.unq.parking;
 
-import com.unq.ParkingSystem;
 import com.unq.PointOfSale;
 import com.unq.TimeUtil;
 import com.unq.app.inspector.Inspector;
-import com.unq.parking.Parking;
 
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 
@@ -25,7 +22,7 @@ public class ParkingArea {
 	}
 
 	public Parking createParking(String phoneNumber, String patent, ParkingStrategy parkingStrategy) {
-		Parking parking = new Parking(patent, parkingStrategy, timeUtil.now());
+		Parking parking = new Parking(patent, parkingStrategy, timeUtil.nowTime());
 		parkings.put(phoneNumber, parking);
 		return parking;
 	}

@@ -4,24 +4,26 @@ import com.unq.parking.ParkingArea;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Purchase {
 
-    private BigInteger id;
+    private static final AtomicInteger atomicId = new AtomicInteger(1000);
+    private int id;
     private ParkingArea area;
     private LocalDateTime date;
 
-    public Purchase(BigInteger id, ParkingArea area, LocalDateTime date) {
-        this.id = id;
+    public Purchase(ParkingArea area, LocalDateTime date) {
+        this.id = atomicId.incrementAndGet();
         this.area = area;
         this.date = date;
     }
 
-    public BigInteger getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(int id) {
         this.id = id;
     }
 

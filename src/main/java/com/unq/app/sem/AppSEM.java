@@ -35,7 +35,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public StartParkingResponse startParking() {
-		LocalTime now = timeUtil.now();
+		LocalTime now = timeUtil.nowTime();
 		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
 
 		try {
@@ -58,7 +58,7 @@ public class AppSEM implements MovementSensor {
 	public EndParkingResponse endParking() {
 		Parking parking = currentArea.removeParking(phoneNumber);
 
-		long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.now());
+		long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.nowTime());
 
 		Duration duration = new Duration(
 				minutes / 60,
@@ -71,7 +71,7 @@ public class AppSEM implements MovementSensor {
 
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())
-				.endHour(timeUtil.now())
+				.endHour(timeUtil.nowTime())
 				.duration(duration)
 				.cost(cost)
 				.build();
