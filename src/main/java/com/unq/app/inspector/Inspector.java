@@ -1,7 +1,6 @@
 package com.unq.app.inspector;
 
-import com.unq.ParkingArea;
-import com.unq.app.inspector.AppInspector;
+import com.unq.parking.ParkingArea;
 
 public class Inspector {
 

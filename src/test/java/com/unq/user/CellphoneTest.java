@@ -1,6 +1,6 @@
 package com.unq.user;
 
-import com.unq.ParkingArea;
+import com.unq.parking.ParkingArea;
 import com.unq.ParkingSystem;
 import com.unq.PointOfSale;
 import com.unq.alert.AlertManager;
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

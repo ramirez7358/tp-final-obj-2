@@ -1,7 +1,7 @@
 package com.unq.app.sem;
 
 
-import com.unq.ParkingArea;
+import com.unq.parking.ParkingArea;
 import com.unq.ParkingSystem;
 import com.unq.TimeUtil;
 import com.unq.alert.AlertManager;
@@ -55,7 +55,6 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public EndParkingResponse endParking() {
-		// Al remover el parking hay que descontar credito
 		Parking parking = currentArea.removeParking(phoneNumber);
 
 		long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.now());
@@ -66,6 +65,8 @@ public class AppSEM implements MovementSensor {
 		);
 
 		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
+
+		ParkingSystem.getInstance().reduceBalance(phoneNumber, cost);
 
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())

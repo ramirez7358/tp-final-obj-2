@@ -1,19 +1,16 @@
 package com.unq.app.sem;
 
-import com.unq.ParkingArea;
+import com.unq.parking.ParkingArea;
 import com.unq.TimeUtil;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingPerAppStrategy;
-import com.unq.user.Car;
-import com.unq.user.Cellphone;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;

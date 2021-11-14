@@ -1,6 +1,7 @@
 package com.unq;
 
 import com.unq.app.inspector.Violation;
+import com.unq.parking.ParkingArea;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,12 +46,12 @@ public class ParkingSystem {
 		}
 	}
 
-	public void reduceBalance(String phoneNumber, Double amount) throws Exception {
+	public void reduceBalance(String phoneNumber, Double amount) {
 		if(balances.containsKey(phoneNumber)) {
 			Double balance = balances.get(phoneNumber);
 			balances.put(phoneNumber, balance - amount);
 		}else {
-			throw new Exception("The user has no registered credit.");
+			System.out.println("The user has no registered credit.");
 		}
 	}
 
