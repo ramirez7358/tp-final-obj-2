@@ -8,6 +8,7 @@ import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
+import com.unq.parking.ParkingPerAppStrategy;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -46,7 +47,7 @@ public class AppSEM implements MovementSensor {
 
 		double estimatedEndTime = now.getHour() + this.getMaxHours(phoneNumber);
 
-		currentArea.createParking(patentCarAssociated, phoneNumber);
+		currentArea.createParking(patentCarAssociated, phoneNumber, new ParkingPerAppStrategy());
 
 		return StartParkingResponse.newBuilder()
 				.startHour(now)

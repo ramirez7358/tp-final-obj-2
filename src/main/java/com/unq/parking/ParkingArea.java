@@ -24,8 +24,8 @@ public class ParkingArea {
 		this.timeUtil = new TimeUtil();
 	}
 
-	public Parking createParking(String phoneNumber, String patent) {
-		Parking parking = new Parking(patent, new ParkingPerAppStrategy(), timeUtil.now());
+	public Parking createParking(String phoneNumber, String patent, ParkingStrategy parkingStrategy) {
+		Parking parking = new Parking(patent, parkingStrategy, timeUtil.now());
 		parkings.put(phoneNumber, parking);
 		return parking;
 	}
