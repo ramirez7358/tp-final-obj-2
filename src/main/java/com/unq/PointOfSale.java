@@ -8,8 +8,8 @@ public class PointOfSale {
 		return;
 	}
 	
-	public void buyCredit() {
-		return;
+	public void buyCredit(String phoneNumber, Double amount) {
+		ParkingSystem.getInstance().increaseBalance(phoneNumber, amount);
 	}
 
 }

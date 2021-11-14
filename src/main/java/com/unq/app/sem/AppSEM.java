@@ -17,37 +17,27 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 public class AppSEM implements MovementSensor {
-	private Double balance;
-	private Cellphone cellphoneAssociated;
-	private Car carAssociated;
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
 	private ParkingModeStrategy parkingModeStrategy;
 	private TimeUtil timeUtil;
 
-	public AppSEM(Double balance, Cellphone cellphoneAssociated, Car carAssociated, ParkingArea currentArea,
-				  ParkingModeStrategy parkingModeStrategy) {
-		this.balance = balance;
-		this.cellphoneAssociated = cellphoneAssociated;
-		this.carAssociated = carAssociated;
-		this.currentArea = currentArea;
+	public AppSEM(ParkingModeStrategy parkingModeStrategy) {
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 		this.parkingModeStrategy = parkingModeStrategy;
 		this.timeUtil = new TimeUtil();
-
-		alertManager.subscribe(AlertType.START_PARKING, cellphoneAssociated);
-		alertManager.subscribe(AlertType.END_PARKING, cellphoneAssociated);
 	}
 
 	public double getMaxHours() {
+		int balance = 2; //hardcode
 		return balance / ParkingSystem.PRICE_PER_HOUR;
 	}
 
-	public StartParkingResponse startParking() throws InsufficientBalanceException {
-
+	public StartParkingResponse startParking(String patent, String phoneNumber) throws InsufficientBalanceException {
 		LocalDateTime now = timeUtil.now();
+		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber); // hardcode
 
-		if(this.balance == 0) {
+		if(balance == 0) {
 			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
 		}
 
@@ -57,7 +47,7 @@ public class AppSEM implements MovementSensor {
 
 		double estimatedEndTime = now.getHour() + this.getMaxHours();
 
-		currentArea.createParking(cellphoneAssociated.getPhoneNumber(), carAssociated.getPatent());
+		currentArea.createParking(patent, phoneNumber);
 
 		return StartParkingResponse.newBuilder()
 				.startHour(now)
@@ -65,8 +55,9 @@ public class AppSEM implements MovementSensor {
 				.build();
 	}
 
-	public EndParkingResponse endParking() {
-		Parking parking = currentArea.removeParking(cellphoneAssociated.getPhoneNumber());
+	public EndParkingResponse endParking(String phoneNumber) {
+		// Al remover el parking hay que descontar credito
+		Parking parking = currentArea.removeParking(phoneNumber);
 
 		long minutes = ChronoUnit.MINUTES.between(parking.getCreationDateTime(), timeUtil.now());
 
@@ -77,74 +68,12 @@ public class AppSEM implements MovementSensor {
 
 		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
 
-		balance -= cost;
-
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationDateTime())
 				.endHour(timeUtil.now())
 				.duration(duration)
 				.cost(cost)
 				.build();
-	}
-
-	public void updateCurrentArea(ParkingArea currentArea) {
-		this.currentArea = currentArea;
-	}
-
-	public Double getBalance() {
-		return balance;
-	}
-
-	public void setBalance(Double balance) {
-		this.balance = balance;
-	}
-
-	public Cellphone getCellphoneAssociated() {
-		return cellphoneAssociated;
-	}
-
-	public void setCellphoneAssociated(Cellphone cellphoneAssociated) {
-		this.cellphoneAssociated = cellphoneAssociated;
-	}
-
-	public Car getCarAssociated() {
-		return carAssociated;
-	}
-
-	public void setCarAssociated(Car carAssociated) {
-		this.carAssociated = carAssociated;
-	}
-
-	public ParkingArea getCurrentArea() {
-		return currentArea;
-	}
-
-	public AlertManager getAlertManager() {
-		return alertManager;
-	}
-
-	public void setAlertManager(AlertManager alertManager) {
-		this.alertManager = alertManager;
-	}
-
-	public void setCurrentArea(ParkingArea currentArea) {
-		this.currentArea = currentArea;
-	}
-
-	public TimeUtil getTimeUtil() {
-		return timeUtil;
-	}
-
-	public void setTimeUtil(TimeUtil timeUtil) {
-		this.timeUtil = timeUtil;
-	}
-
-	public ParkingModeStrategy getParkingModeStrategy() {
-		return parkingModeStrategy;
-	}
-
-	public void setParkingModeStrategy(ParkingModeStrategy parkingModeStrategy) {
-		this.parkingModeStrategy = parkingModeStrategy;
 	}
 
 	@Override
