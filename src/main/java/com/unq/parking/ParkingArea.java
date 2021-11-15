@@ -22,7 +22,7 @@ public class ParkingArea {
 	}
 
 	public Parking createParking(String phoneNumber, String patent) {
-		Parking parking = new Parking(patent,  timeUtil.nowTime());
+		Parking parking = new Parking(patent);
 		parkings.put(phoneNumber, parking);
 		return parking;
 	}

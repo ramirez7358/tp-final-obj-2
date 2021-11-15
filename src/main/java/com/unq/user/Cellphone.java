@@ -10,7 +10,6 @@ import com.unq.app.sem.AppSEM;
 import com.unq.app.sem.EndParkingResponse;
 import com.unq.app.sem.ParkingMode;
 import com.unq.app.sem.StartParkingResponse;
-import com.unq.exceptions.InsufficientBalanceException;
 
 public class Cellphone implements AlertListener {
 
@@ -23,7 +22,7 @@ public class Cellphone implements AlertListener {
     public Cellphone(String phoneNumber, String patentCarAssociated) {
         this.phoneNumber = phoneNumber;
         this.patentCarAssociated = patentCarAssociated;
-        this.app = new AppSEM(ParkingMode.MANUAL);
+        this.app = new AppSEM(ParkingMode.MANUAL, phoneNumber, patentCarAssociated);
         this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 
         alertManager.subscribe(AlertType.START_PARKING, this);
@@ -34,12 +33,12 @@ public class Cellphone implements AlertListener {
         return ParkingSystem.getInstance().getBalance(phoneNumber);
     }
 
-    public StartParkingResponse startParking() throws InsufficientBalanceException {
-        return this.app.startParking(patentCarAssociated, phoneNumber);
+    public StartParkingResponse startParking() {
+        return this.app.startParking();
     }
 
     public EndParkingResponse endParking() {
-        return this.app.endParking(phoneNumber);
+        return this.app.endParking();
     }
 
     public void buyCredit(Double credit, PointOfSale pointOfSale) throws Exception {

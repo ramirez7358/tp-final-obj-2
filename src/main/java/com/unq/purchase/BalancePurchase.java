@@ -2,7 +2,6 @@ package com.unq.purchase;
 
 import com.unq.parking.ParkingArea;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 public class BalancePurchase extends Purchase{

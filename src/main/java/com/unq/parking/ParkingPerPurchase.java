@@ -3,8 +3,8 @@ package com.unq.parking;
 import java.time.LocalTime;
 
 public class ParkingPerPurchase extends Parking{
-    public ParkingPerPurchase(String carPatent, LocalTime creationTime) {
-        super(carPatent,  creationTime);
+    public ParkingPerPurchase(String carPatent) {
+        super(carPatent);
     }
 
     @Override
