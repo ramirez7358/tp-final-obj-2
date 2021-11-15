@@ -5,19 +5,19 @@ import java.time.LocalTime;
 import com.unq.TimeUtil;
 
 
-public class Parking {
+public abstract class Parking {
     private String carPatent;
     private LocalTime creationTime;
+    private LocalTime endTime;
     private TimeUtil timeUtil;
 
     public Parking(String carPatent) {
         this.carPatent = carPatent;
+        this.timeUtil = new TimeUtil();
         this.creationTime = timeUtil.nowTime();
     }
 
-    public Boolean inForce() {
-        return true;
-    }
+    public abstract Boolean inForce();
 
     public String getCarPatent() {
         return carPatent;
@@ -27,12 +27,27 @@ public class Parking {
         this.carPatent = carPatent;
     }
 
-
     public LocalTime getCreationTime() {
         return creationTime;
     }
 
     public void setCreationTime(LocalTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public TimeUtil getTimeUtil() {
+        return timeUtil;
+    }
+
+    public void setTimeUtil(TimeUtil timeUtil) {
+        this.timeUtil = timeUtil;
     }
 }

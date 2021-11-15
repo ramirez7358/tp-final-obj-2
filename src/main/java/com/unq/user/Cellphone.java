@@ -22,7 +22,7 @@ public class Cellphone implements AlertListener {
     public Cellphone(String phoneNumber, String patentCarAssociated) {
         this.phoneNumber = phoneNumber;
         this.patentCarAssociated = patentCarAssociated;
-        this.app = new AppSEM(ParkingMode.MANUAL, phoneNumber, patentCarAssociated);
+        this.app = new AppSEM(phoneNumber, patentCarAssociated);
         this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 
         alertManager.subscribe(AlertType.START_PARKING, this);

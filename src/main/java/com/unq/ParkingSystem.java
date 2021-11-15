@@ -3,6 +3,7 @@ package com.unq;
 import com.unq.app.inspector.Violation;
 import com.unq.parking.ParkingArea;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,8 @@ public class ParkingSystem {
 	private List<Violation> violations;
 
 	private static ParkingSystem instance;
-	public static final int START_TIME = 7;
-	public static final int END_TIME = 20;
+	public static final LocalTime START_TIME = LocalTime.of(7,0,0);
+	public static final LocalTime END_TIME = LocalTime.of(20,0,0);
 	public static final double PRICE_PER_HOUR = 40;
 
 	private ParkingSystem() {

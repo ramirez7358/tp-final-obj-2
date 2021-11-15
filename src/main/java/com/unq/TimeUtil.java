@@ -9,6 +9,10 @@ public class TimeUtil {
         return LocalTime.now();
     }
 
+    public LocalTime timeOf(int hour, int minutes, int seconds){
+        return LocalTime.of(hour,minutes,seconds);
+    }
+
     public LocalDateTime nowDateTime() {
         return LocalDateTime.now();
     }

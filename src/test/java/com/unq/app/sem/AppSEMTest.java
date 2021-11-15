@@ -69,12 +69,12 @@ public class AppSEMTest {
 
     @Test()
     public void startParking() throws InsufficientBalanceException {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBC645");
 
         LocalTime timeMock = LocalTime.of(12, 0, 0);
-        Parking parkingMock = new Parking("MBC645", new ParkingPerApp(), timeMock);
+        Parking parkingMock = new ParkingPerApp("MBC645", "1234567897");
 
-        when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(parkingMock);
+        when(area.createParking(Mockito.any(), Mockito.any())).getMock();
         when(timeUtil.nowTime()).thenReturn(timeMock);
 
         StartParkingResponse response = appSEM.startParking("MBZ912", "1102931312");

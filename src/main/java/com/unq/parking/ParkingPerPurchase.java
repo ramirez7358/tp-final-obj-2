@@ -1,14 +1,30 @@
 package com.unq.parking;
 
+import com.unq.ParkingSystem;
+import com.unq.purchase.Purchase;
+
 import java.time.LocalTime;
 
 public class ParkingPerPurchase extends Parking{
-    public ParkingPerPurchase(String carPatent) {
+    private Purchase purchaseRegistry;
+
+    public ParkingPerPurchase(String carPatent, LocalTime endTime, Purchase purchaseRegistry) {
         super(carPatent);
+        this.setEndTime(endTime);
+        this.purchaseRegistry = purchaseRegistry;
     }
 
     @Override
     public Boolean inForce() {
-        return null;
+        LocalTime now = this.getTimeUtil().nowTime();
+        return now.isAfter(this.getCreationTime()) && now.isBefore(ParkingSystem.END_TIME);
+    }
+
+    public Purchase getPurchaseRegistry() {
+        return purchaseRegistry;
+    }
+
+    public void setPurchaseRegistry(Purchase purchaseRegistry) {
+        this.purchaseRegistry = purchaseRegistry;
     }
 }
