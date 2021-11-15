@@ -47,7 +47,7 @@ public class AppSEM implements MovementSensor {
 
 		double estimatedEndTime = now.getHour() + this.getMaxHours(phoneNumber);
 
-		currentArea.createParking(patentCarAssociated, phoneNumber, new ParkingPerAppStrategy());
+		currentArea.createParking(patentCarAssociated, phoneNumber);
 
 		return StartParkingResponse.newBuilder()
 				.startHour(now)

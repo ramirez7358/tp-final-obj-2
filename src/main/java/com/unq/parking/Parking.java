@@ -5,12 +5,10 @@ import java.time.LocalTime;
 
 public class Parking {
     private String carPatent;
-    private ParkingStrategy parkingStrategy;
     private LocalTime creationTime;
 
-    public Parking(String carPatent, ParkingStrategy parkingStrategy, LocalTime creationTime) {
+    public Parking(String carPatent,LocalTime creationTime) {
         this.carPatent = carPatent;
-        this.parkingStrategy = parkingStrategy;
         this.creationTime = creationTime;
     }
 
@@ -26,13 +24,6 @@ public class Parking {
         this.carPatent = carPatent;
     }
 
-    public ParkingStrategy getParkingStrategy() {
-        return parkingStrategy;
-    }
-
-    public void setParkingStrategy(ParkingStrategy parkingStrategy) {
-        this.parkingStrategy = parkingStrategy;
-    }
 
     public LocalTime getCreationTime() {
         return creationTime;

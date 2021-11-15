@@ -1,6 +1,12 @@
 package com.unq.parking;
 
-public class ParkingPerPurchaseStrategy implements ParkingStrategy{
+import java.time.LocalTime;
+
+public class ParkingPerPurchaseStrategy extends Parking{
+    public ParkingPerPurchaseStrategy(String carPatent, LocalTime creationTime) {
+        super(carPatent,  creationTime);
+    }
+
     @Override
     public Boolean inForce() {
         return null;
