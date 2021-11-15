@@ -1,7 +1,7 @@
 package com.unq;
 
 import com.unq.parking.ParkingArea;
-import com.unq.parking.ParkingPerPurchaseStrategy;
+import com.unq.parking.ParkingPerPurchase;
 import com.unq.purchase.BalancePurchase;
 import com.unq.purchase.HoursPurchase;
 import com.unq.purchase.ShoppingRecord;
@@ -31,7 +31,7 @@ public class PointOfSale {
 		ParkingSystem.getInstance().reduceBalance(phoneNumber,cost);
 		ShoppingRecord.getInstance().addPurchase(purchase);
 
-		area.createParking(phoneNumber, patent, new ParkingPerPurchaseStrategy());
+		area.createParking(phoneNumber, patent, new ParkingPerPurchase());
 	}
 
 	public ParkingArea getArea() {

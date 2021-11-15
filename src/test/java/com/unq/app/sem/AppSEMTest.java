@@ -4,7 +4,7 @@ import com.unq.parking.ParkingArea;
 import com.unq.TimeUtil;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
-import com.unq.parking.ParkingPerAppStrategy;
+import com.unq.parking.ParkingPerApp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -72,7 +72,7 @@ public class AppSEMTest {
         AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
 
         LocalTime timeMock = LocalTime.of(12, 0, 0);
-        Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), timeMock);
+        Parking parkingMock = new Parking("MBC645", new ParkingPerApp(), timeMock);
 
         when(area.createParking(Mockito.any(), Mockito.any())).thenReturn(parkingMock);
         when(timeUtil.nowTime()).thenReturn(timeMock);
@@ -91,7 +91,7 @@ public class AppSEMTest {
         LocalTime dateMock = LocalTime.of(18, 0, 0);
         LocalTime startParkingDateTime = LocalTime.of(16, 0, 0);
 
-        Parking parkingMock = new Parking("MBC645", new ParkingPerAppStrategy(), startParkingDateTime);
+        Parking parkingMock = new Parking("MBC645", new ParkingPerApp(), startParkingDateTime);
 
         when(area.removeParking(Mockito.any())).thenReturn(parkingMock);
         when(timeUtil.nowTime()).thenReturn(dateMock);

@@ -2,14 +2,17 @@ package com.unq.parking;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import com.unq.TimeUtil;
+
 
 public class Parking {
     private String carPatent;
     private LocalTime creationTime;
+    private TimeUtil timeUtil;
 
-    public Parking(String carPatent,LocalTime creationTime) {
+    public Parking(String carPatent) {
         this.carPatent = carPatent;
-        this.creationTime = creationTime;
+        this.creationTime = timeUtil.nowTime();
     }
 
     public Boolean inForce() {

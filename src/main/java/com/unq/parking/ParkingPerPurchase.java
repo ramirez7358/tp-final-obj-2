@@ -2,8 +2,8 @@ package com.unq.parking;
 
 import java.time.LocalTime;
 
-public class ParkingPerPurchaseStrategy extends Parking{
-    public ParkingPerPurchaseStrategy(String carPatent, LocalTime creationTime) {
+public class ParkingPerPurchase extends Parking{
+    public ParkingPerPurchase(String carPatent, LocalTime creationTime) {
         super(carPatent,  creationTime);
     }
 
