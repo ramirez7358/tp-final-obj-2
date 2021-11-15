@@ -1,6 +1,8 @@
 package com.unq.app.sem;
 
 
+import com.unq.app.sem.mode.ManualModeStrategy;
+import com.unq.app.sem.mode.ModeStrategy;
 import com.unq.parking.ParkingArea;
 import com.unq.ParkingSystem;
 import com.unq.TimeUtil;
@@ -15,14 +17,14 @@ import java.time.temporal.ChronoUnit;
 public class AppSEM implements MovementSensor {
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
-	private ParkingMode parkingMode;
+	private ModeStrategy appMode;
 	private TimeUtil timeUtil;
 	private String phoneNumber;
 	private String patentCarAssociated;
 
-	public AppSEM(ParkingMode parkingMode, String phoneNumber, String patentCarAssociated) {
+	public AppSEM(String phoneNumber, String patentCarAssociated) {
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
-		this.parkingMode = parkingMode;
+		this.appMode = new ManualModeStrategy();
 		this.phoneNumber = phoneNumber;
 		this.patentCarAssociated = patentCarAssociated;
 		this.timeUtil = new TimeUtil();
@@ -92,12 +94,12 @@ public class AppSEM implements MovementSensor {
 		this.alertManager = alertManager;
 	}
 
-	public ParkingMode getParkingMode() {
-		return parkingMode;
+	public ModeStrategy getAppMode() {
+		return appMode;
 	}
 
-	public void setParkingMode(ParkingMode parkingMode) {
-		this.parkingMode = parkingMode;
+	public void setAppMode(ModeStrategy appMode) {
+		this.appMode = appMode;
 	}
 
 	public TimeUtil getTimeUtil() {
@@ -138,17 +140,11 @@ public class AppSEM implements MovementSensor {
 
 	@Override
 	public void driving() {
-		if(currentArea.existParking(patentCarAssociated) && this.parkingMode == ParkingMode.AUTOMATIC) {
-			this.endParking();
-			alertManager.notify(AlertType.END_PARKING, "The end of parking has been triggered automatically.");
-		}
+		this.appMode.manageEndParking(this);
 	}
 
 	@Override
 	public void walking() {
-		if(this.parkingMode == ParkingMode.AUTOMATIC && !currentArea.existParking(patentCarAssociated)) {
-			this.startParking();
-			alertManager.notify(AlertType.START_PARKING, "The parking start has been triggered automatically.");
-		}
+		this.appMode.manageStartParking(this);
 	}
 }
