@@ -74,7 +74,7 @@ public class AppSEMTest {
         LocalTime timeMock = LocalTime.of(12, 0, 0);
         Parking parkingMock = new ParkingPerApp("MBC645", "1234567897");
 
-        when(area.createParking(Mockito.any(), Mockito.any())).getMock();
+        //when(area.createParking(Mockito.any(), Mockito.any())).getMock();
         when(timeUtil.nowTime()).thenReturn(timeMock);
 
         StartParkingResponse response = appSEM.startParking("MBZ912", "1102931312");

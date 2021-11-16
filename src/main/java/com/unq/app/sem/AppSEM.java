@@ -31,6 +31,9 @@ public class AppSEM implements MovementSensor {
 		this.timeUtil = new TimeUtil();
 	}
 
+	public AppSEM(ParkingMode manual) {
+	}
+
 	public double getMaxHours(String phoneNumber) {
 		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
 		return balance / ParkingSystem.PRICE_PER_HOUR;
@@ -148,5 +151,8 @@ public class AppSEM implements MovementSensor {
 	@Override
 	public void walking() {
 		this.appMode.manageStartParking(this);
+	}
+
+	public void startParking(String patent, String phoneNumber) {
 	}
 }
