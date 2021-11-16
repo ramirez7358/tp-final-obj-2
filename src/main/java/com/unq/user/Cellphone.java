@@ -4,11 +4,9 @@ import com.unq.parking.ParkingArea;
 import com.unq.ParkingSystem;
 import com.unq.PointOfSale;
 import com.unq.alert.AlertListener;
-import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.app.sem.AppSEM;
 import com.unq.app.sem.EndParkingResponse;
-import com.unq.app.sem.ParkingMode;
 import com.unq.app.sem.StartParkingResponse;
 
 public class Cellphone implements AlertListener {
