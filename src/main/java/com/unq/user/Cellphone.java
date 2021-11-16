@@ -17,16 +17,14 @@ public class Cellphone implements AlertListener {
     private String phoneNumber;
     private String patentCarAssociated;
     private AppSEM app;
-    private AlertManager alertManager;
 
     public Cellphone(String phoneNumber, String patentCarAssociated) {
         this.phoneNumber = phoneNumber;
         this.patentCarAssociated = patentCarAssociated;
         this.app = new AppSEM(phoneNumber, patentCarAssociated);
-        this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 
-        alertManager.subscribe(AlertType.START_PARKING, this);
-        alertManager.subscribe(AlertType.END_PARKING, this);
+        app.getAlertManager().subscribe(AlertType.START_PARKING, this);
+        app.getAlertManager().subscribe(AlertType.END_PARKING, this);
     }
 
     public Double getBalance() {
@@ -73,14 +71,6 @@ public class Cellphone implements AlertListener {
         this.app = app;
     }
 
-    public AlertManager getAlertManager() {
-        return alertManager;
-    }
-
-    public void setAlertManager(AlertManager alertManager) {
-        this.alertManager = alertManager;
-    }
-
     public ParkingArea getCurrentArea() {
         return currentArea;
     }
@@ -91,6 +81,6 @@ public class Cellphone implements AlertListener {
 
     @Override
     public void update(AlertType alertType, String data) {
-
+        System.out.printf("Alert: %s. Data: %s%n", alertType, data);
     }
 }
