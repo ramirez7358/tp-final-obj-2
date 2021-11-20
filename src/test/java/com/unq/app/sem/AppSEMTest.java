@@ -1,7 +1,7 @@
 package com.unq.app.sem;
 
 import com.unq.parking.ParkingArea;
-import com.unq.TimeUtil;
+import com.unq.commons.TimeUtil;
 import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingPerApp;

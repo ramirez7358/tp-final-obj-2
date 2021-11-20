@@ -1,4 +1,4 @@
-package com.unq;
+package com.unq.commons;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

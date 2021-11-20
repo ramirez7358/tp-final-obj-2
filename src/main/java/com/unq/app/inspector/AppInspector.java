@@ -1,7 +1,7 @@
 package com.unq.app.inspector;
 
-import com.unq.ParkingSystem;
-import com.unq.TimeUtil;
+import com.unq.parking.ParkingSystem;
+import com.unq.commons.TimeUtil;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingArea;
 

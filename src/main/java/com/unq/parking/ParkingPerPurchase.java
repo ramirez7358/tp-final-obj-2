@@ -1,6 +1,5 @@
 package com.unq.parking;
 
-import com.unq.ParkingSystem;
 import com.unq.purchase.Purchase;
 
 import java.time.LocalTime;

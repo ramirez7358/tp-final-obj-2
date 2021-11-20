@@ -1,8 +1,8 @@
 package com.unq.user;
 
 import com.unq.parking.ParkingArea;
-import com.unq.ParkingSystem;
-import com.unq.PointOfSale;
+import com.unq.parking.ParkingSystem;
+import com.unq.parking.PointOfSale;
 import com.unq.alert.AlertListener;
 import com.unq.alert.AlertType;
 import com.unq.app.sem.AppSEM;

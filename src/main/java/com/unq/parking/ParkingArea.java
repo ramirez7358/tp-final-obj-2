@@ -1,7 +1,6 @@
 package com.unq.parking;
 
-import com.unq.PointOfSale;
-import com.unq.TimeUtil;
+import com.unq.commons.TimeUtil;
 import com.unq.app.inspector.Inspector;
 
 import java.util.*;

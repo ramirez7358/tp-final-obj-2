@@ -1,7 +1,5 @@
 package com.unq.parking;
 
-import com.unq.ParkingSystem;
-
 import java.time.LocalTime;
 
 public class ParkingPerApp extends Parking {

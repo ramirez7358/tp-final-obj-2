@@ -1,7 +1,6 @@
-package com.unq;
+package com.unq.parking;
 
 import com.unq.app.inspector.Violation;
-import com.unq.parking.ParkingArea;
 
 import java.time.LocalTime;
 import java.util.ArrayList;

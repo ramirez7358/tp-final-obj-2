@@ -1,7 +1,6 @@
-package com.unq;
+package com.unq.parking;
 
-import com.unq.parking.ParkingArea;
-import com.unq.parking.ParkingPerPurchase;
+import com.unq.commons.TimeUtil;
 import com.unq.purchase.BalancePurchase;
 import com.unq.purchase.HoursPurchase;
 import com.unq.purchase.ShoppingRecord;

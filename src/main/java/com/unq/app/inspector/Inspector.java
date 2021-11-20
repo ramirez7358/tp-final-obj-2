@@ -1,6 +1,6 @@
 package com.unq.app.inspector;
 
-import com.unq.TimeUtil;
+import com.unq.commons.TimeUtil;
 import com.unq.parking.ParkingArea;
 
 public class Inspector {
