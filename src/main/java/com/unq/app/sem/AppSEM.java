@@ -138,7 +138,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	private void validateHour(LocalTime time) throws InsufficientBalanceException {
-		if(time.getHour() < 8 || time.getHour() > 20) {
+		if(time.isBefore(ParkingSystem.START_TIME) || time.isAfter(ParkingSystem.END_TIME)) {
 			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
 		}
 	}

@@ -1,11 +1,13 @@
 package com.unq.parking;
 
+import com.unq.alert.AlertListener;
+import com.unq.alert.AlertManager;
+import com.unq.alert.AlertType;
 import com.unq.app.inspector.Violation;
 import com.unq.commons.TimeUtil;
 
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ParkingSystem {
 
@@ -18,6 +20,7 @@ public class ParkingSystem {
 	public static final LocalTime START_TIME = LocalTime.of(7,0,0);
 	public static final LocalTime END_TIME = LocalTime.of(20,0,0);
 	public static final double PRICE_PER_HOUR = 40;
+	private final AlertManager alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 
 	private ParkingSystem() {
 		this.balances = new HashMap<>();
@@ -32,6 +35,11 @@ public class ParkingSystem {
 		}
 
 		return instance;
+	}
+
+	public void subscribeParkingMonitoring(AlertListener alertListener) {
+		this.alertManager.subscribe(AlertType.START_PARKING, alertListener);
+		this.alertManager.subscribe(AlertType.END_PARKING, alertListener);
 	}
 
 	public void finalizeAllCurrentParking() {
