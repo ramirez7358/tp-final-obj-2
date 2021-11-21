@@ -39,7 +39,7 @@ public class ParkingArea {
 	}
 
 	public Boolean existParking(String phoneNumber) {
-		return parkings.get(phoneNumber) != null;
+		return parkings.entrySet().stream().anyMatch(p -> p.getKey().equals(phoneNumber));
 	}
 
 	public Map<String, Parking> getParkings() {

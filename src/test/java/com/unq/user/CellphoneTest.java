@@ -33,7 +33,6 @@ public class CellphoneTest {
         cellphone = new Cellphone("1234567891", "BMS912");
         cellphone.setApp(appMock);
         cellphone.setCurrentArea(parkingAreaMock);
-        cellphone.setAlertManager(alertManagerMock);
     }
 
     @Test
@@ -61,9 +60,9 @@ public class CellphoneTest {
                 .maxHour(3D)
                 .build();
 
-        when(appMock.startParking(patent, phoneNumber)).thenReturn(response);
+        when(appMock.startParking()).thenReturn(response);
 
-        StartParkingResponse startParkingResponse = appMock.startParking(patent, phoneNumber);
+        StartParkingResponse startParkingResponse = appMock.startParking();
 
         Assertions.assertEquals(now, startParkingResponse.getStartHour());
         Assertions.assertEquals(3, startParkingResponse.getMaxHour());
@@ -82,7 +81,7 @@ public class CellphoneTest {
                 .duration(new Duration(2L,0L))
                 .build();
 
-        when(appMock.endParking(phoneNumber)).thenReturn(response);
+        when(appMock.endParking()).thenReturn(response);
 
         EndParkingResponse endParkingResponse = cellphone.endParking();
 
