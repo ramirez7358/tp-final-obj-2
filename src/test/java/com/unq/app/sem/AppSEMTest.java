@@ -77,7 +77,7 @@ public class AppSEMTest {
         //when(area.createParking(Mockito.any(), Mockito.any())).getMock();
         when(timeUtil.nowTime()).thenReturn(timeMock);
 
-        StartParkingResponse response = appSEM.startParking("MBZ912", "1102931312");
+        StartParkingResponse response = appSEM.startParking();
 
         assertEquals(12, response.getStartHour().getHour());
         assertEquals(0, response.getStartHour().getMinute());
@@ -91,12 +91,10 @@ public class AppSEMTest {
         LocalTime dateMock = LocalTime.of(18, 0, 0);
         LocalTime startParkingDateTime = LocalTime.of(16, 0, 0);
 
-        Parking parkingMock = new Parking("MBC645", new ParkingPerApp(), startParkingDateTime);
-
-        when(area.removeParking(Mockito.any())).thenReturn(parkingMock);
+        //when(area.removeParking(Mockito.any())).thenReturn(parkingMock);
         when(timeUtil.nowTime()).thenReturn(dateMock);
 
-        EndParkingResponse response = appSEM.endParking("1102931312");
+        EndParkingResponse response = appSEM.endParking();
 
         assertEquals(startParkingDateTime, response.getStartHour());
         assertEquals(dateMock, response.getEndHour());

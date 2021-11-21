@@ -152,7 +152,4 @@ public class AppSEM implements MovementSensor {
 	public void walking() {
 		this.appMode.manageStartParking(this);
 	}
-
-	public void startParking(String patent, String phoneNumber) {
-	}
 }

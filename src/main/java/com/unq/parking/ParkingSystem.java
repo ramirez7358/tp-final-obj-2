@@ -1,18 +1,18 @@
 package com.unq.parking;
 
 import com.unq.app.inspector.Violation;
+import com.unq.commons.TimeUtil;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ParkingSystem {
 
 	private Map<String, Double> balances;
 	private List<ParkingArea> areas;
 	private List<Violation> violations;
+	private TimeUtil timeUtil;
 
 	private static ParkingSystem instance;
 	public static final LocalTime START_TIME = LocalTime.of(7,0,0);
@@ -23,6 +23,7 @@ public class ParkingSystem {
 		this.balances = new HashMap<>();
 		this.areas = new ArrayList<>();
 		this.violations = new ArrayList<>();
+		this.timeUtil = new TimeUtil();
 	}
 
 	public static ParkingSystem getInstance() {
@@ -31,6 +32,18 @@ public class ParkingSystem {
 		}
 
 		return instance;
+	}
+
+	public void finalizeAllCurrentParking() {
+		if(timeUtil.nowTime().isAfter(END_TIME)) {
+			this.areas.forEach(a -> {
+				a.getParkings()
+						.entrySet()
+						.stream()
+						.filter(x -> x.getValue().inForce())
+						.forEach(x -> a.removeParking(x.getKey()));
+			});
+		}
 	}
 
 	public void registryViolation(Violation violation) {
@@ -85,5 +98,13 @@ public class ParkingSystem {
 
 	public static void setInstance(ParkingSystem instance) {
 		ParkingSystem.instance = instance;
+	}
+
+	public TimeUtil getTimeUtil() {
+		return timeUtil;
+	}
+
+	public void setTimeUtil(TimeUtil timeUtil) {
+		this.timeUtil = timeUtil;
 	}
 }
