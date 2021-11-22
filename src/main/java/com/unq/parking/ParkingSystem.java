@@ -76,6 +76,7 @@ public class ParkingSystem {
 			Double balance = balances.get(phoneNumber);
 			balances.put(phoneNumber, balance - amount);
 		}else {
+
 			System.out.println("The user has no registered credit.");
 		}
 	}

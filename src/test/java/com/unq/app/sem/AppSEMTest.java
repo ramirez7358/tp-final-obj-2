@@ -3,14 +3,12 @@ package com.unq.app.sem;
 import com.unq.app.sem.movement.DrivingState;
 import com.unq.parking.ParkingArea;
 import com.unq.commons.TimeUtil;
-import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingPerApp;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.time.LocalTime;
 
@@ -32,7 +30,7 @@ public class AppSEMTest {
     public void calculateMaxHours() {
         AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
-        double maxHours = appSEM.getMaxHours("1234567899");
+        double maxHours = appSEM.getMaxHours();
 
         Assertions.assertEquals(4, maxHours);
     }
@@ -41,7 +39,7 @@ public class AppSEMTest {
     public void calculateMaxWithZeroBalance() {
         AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
-        double maxHours = appSEM.getMaxHours("1234567891");
+        double maxHours = appSEM.getMaxHours();
 
         Assertions.assertEquals(0, maxHours);
     }
@@ -50,13 +48,13 @@ public class AppSEMTest {
     public void calculateHalfHour() {
         AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
-        double maxHours = appSEM.getMaxHours("1234567899");
+        double maxHours = appSEM.getMaxHours();
 
         Assertions.assertEquals(0.5, maxHours);
     }
 
     @Test
-    public void startParkingInsufficientBalance() throws InsufficientBalanceException {
+    public void startParkingInsufficientBalance(){
         AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         /*InsufficientBalanceException thrown = assertThrows(
@@ -69,7 +67,7 @@ public class AppSEMTest {
     }
 
     @Test()
-    public void startParking() throws InsufficientBalanceException {
+    public void startParking()  {
         AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         LocalTime timeMock = LocalTime.of(12, 0, 0);

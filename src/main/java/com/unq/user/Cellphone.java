@@ -41,7 +41,7 @@ public class Cellphone implements AlertListener {
     }
 
     public void buyCredit(Double credit, PointOfSale pointOfSale) throws Exception {
-        if(!this.currentArea.getPointOfSales().contains(pointOfSale)) {
+        if(!this.currentArea.containPoint(pointOfSale)) {
             throw new Exception("The point of sale does not belong to this parking area.");
         }
 

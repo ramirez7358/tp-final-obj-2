@@ -8,7 +8,6 @@ import com.unq.app.sem.AppSEM;
 import com.unq.app.sem.Duration;
 import com.unq.app.sem.EndParkingResponse;
 import com.unq.app.sem.StartParkingResponse;
-import com.unq.exceptions.InsufficientBalanceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ public class CellphoneTest {
     }
 
     @Test
-    public void startParkingResponse() throws InsufficientBalanceException {
+    public void startParkingResponse() {
         String patent = "MBZ912";
         String phoneNumber = "1234567891";
         LocalTime now = LocalTime.now();

@@ -1,6 +1,7 @@
 package com.unq.app.sem;
 
 
+import com.unq.alert.AlertListener;
 import com.unq.app.sem.mode.ManualModeStrategy;
 import com.unq.app.sem.mode.ModeStrategy;
 import com.unq.app.sem.movement.MovementState;
@@ -9,14 +10,15 @@ import com.unq.parking.ParkingSystem;
 import com.unq.commons.TimeUtil;
 import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
-import com.unq.exceptions.InsufficientBalanceException;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingPerApp;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class AppSEM implements MovementSensor {
+import com.unq.exceptions.CustomException.*;
+
+public class AppSEM implements MovementSensor, AlertListener {
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
 	private ModeStrategy appMode;
@@ -36,23 +38,31 @@ public class AppSEM implements MovementSensor {
 		this.movementState = movementState;
 	}
 
-	public double getMaxHours(String phoneNumber) {
+	public void showMessage(String message) {
+		System.out.println(message);
+	}
+
+	public double getMaxHours() {
 		Double balance = parkingSystem.getBalance(phoneNumber);
 		return balance / ParkingSystem.PRICE_PER_HOUR;
 	}
 
+	public double getBalance() {
+		return parkingSystem.getBalance(phoneNumber);
+	}
+
 	public StartParkingResponse startParking() {
 		LocalTime now = timeUtil.nowTime();
-		Double balance = parkingSystem.getBalance(phoneNumber);
+		Double balance = this.getBalance();
 
 		try {
 			this.validateBalance(balance);
 			this.validateHour(now);
 		} catch (InsufficientBalanceException e) {
-			System.out.println(e.getMessage());
+			//throw new InsufficientBalanceException(e.getMessage());
 		}
 
-		double estimatedEndTime = now.getHour() + this.getMaxHours(phoneNumber);
+		double estimatedEndTime = now.getHour() + this.getMaxHours();
 
 		ParkingPerApp parking = new ParkingPerApp(patentCarAssociated, phoneNumber);
 		currentArea.createParking(phoneNumber, parking);
@@ -146,7 +156,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	private void validateBalance(Double balance) throws InsufficientBalanceException {
-		if(balance == 0) {
+		if(balance.equals(0.0)) {
 			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
 		}
 	}
@@ -165,5 +175,10 @@ public class AppSEM implements MovementSensor {
 	@Override
 	public void walking() {
 		this.movementState.startWalking(this);
+	}
+
+	@Override
+	public void update(AlertType alertType, String data) {
+
 	}
 }

@@ -14,7 +14,8 @@ public class ParkingArea {
 	private List<PointOfSale> pointOfSales;
 	private Inspector inspector;
 	private TimeUtil timeUtil;
-	private AlertManager alertManager;
+
+	private final AlertManager alertManager;
 
 	public ParkingArea(Inspector inspector, AlertManager alertManager) {
 		this.parkings = new HashMap<>();
@@ -22,6 +23,10 @@ public class ParkingArea {
 		this.inspector = inspector;
 		this.alertManager = alertManager;
 		this.timeUtil = new TimeUtil();
+	}
+
+	public Boolean containPoint(PointOfSale pointOfSale) {
+		return this.pointOfSales.contains(pointOfSale);
 	}
 
 	public void createParking(String phoneNumber, Parking parking) {
