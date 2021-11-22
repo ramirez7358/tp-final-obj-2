@@ -1,5 +1,6 @@
 package com.unq.app.sem;
 
+import com.unq.app.sem.movement.DrivingState;
 import com.unq.parking.ParkingArea;
 import com.unq.commons.TimeUtil;
 import com.unq.exceptions.InsufficientBalanceException;
@@ -29,7 +30,7 @@ public class AppSEMTest {
 
     @Test
     public void calculateMaxHours() {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         double maxHours = appSEM.getMaxHours("1234567899");
 
@@ -38,7 +39,7 @@ public class AppSEMTest {
 
     @Test
     public void calculateMaxWithZeroBalance() {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         double maxHours = appSEM.getMaxHours("1234567891");
 
@@ -47,7 +48,7 @@ public class AppSEMTest {
 
     @Test
     public void calculateHalfHour() {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         double maxHours = appSEM.getMaxHours("1234567899");
 
@@ -56,7 +57,7 @@ public class AppSEMTest {
 
     @Test
     public void startParkingInsufficientBalance() throws InsufficientBalanceException {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         /*InsufficientBalanceException thrown = assertThrows(
                 InsufficientBalanceException.class,
@@ -69,7 +70,7 @@ public class AppSEMTest {
 
     @Test()
     public void startParking() throws InsufficientBalanceException {
-        AppSEM appSEM = new AppSEM("1234567891", "MBC645");
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         LocalTime timeMock = LocalTime.of(12, 0, 0);
         Parking parkingMock = new ParkingPerApp("MBC645", "1234567897");
@@ -86,7 +87,7 @@ public class AppSEMTest {
 
     @Test
     public void endParking() {
-        AppSEM appSEM = new AppSEM(ParkingMode.MANUAL);
+        AppSEM appSEM = new AppSEM("1234567891", "MBS865", new DrivingState());
 
         LocalTime dateMock = LocalTime.of(18, 0, 0);
         LocalTime startParkingDateTime = LocalTime.of(16, 0, 0);

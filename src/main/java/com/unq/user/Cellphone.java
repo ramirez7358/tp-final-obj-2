@@ -1,5 +1,6 @@
 package com.unq.user;
 
+import com.unq.app.sem.movement.DrivingState;
 import com.unq.parking.ParkingArea;
 import com.unq.parking.ParkingSystem;
 import com.unq.parking.PointOfSale;
@@ -21,7 +22,7 @@ public class Cellphone implements AlertListener {
     public Cellphone(String phoneNumber, String patentCarAssociated) {
         this.phoneNumber = phoneNumber;
         this.patentCarAssociated = patentCarAssociated;
-        this.app = new AppSEM(phoneNumber, patentCarAssociated);
+        this.app = new AppSEM(phoneNumber, patentCarAssociated, new DrivingState());
 
         app.getAlertManager().subscribe(AlertType.START_PARKING, this);
         app.getAlertManager().subscribe(AlertType.END_PARKING, this);

@@ -3,6 +3,7 @@ package com.unq.app.sem;
 
 import com.unq.app.sem.mode.ManualModeStrategy;
 import com.unq.app.sem.mode.ModeStrategy;
+import com.unq.app.sem.movement.MovementState;
 import com.unq.parking.ParkingArea;
 import com.unq.parking.ParkingSystem;
 import com.unq.commons.TimeUtil;
@@ -22,18 +23,17 @@ public class AppSEM implements MovementSensor {
 	private TimeUtil timeUtil;
 	private String phoneNumber;
 	private String patentCarAssociated;
+	private MovementState movementState;
 
 	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
 
-	public AppSEM(String phoneNumber, String patentCarAssociated) {
+	public AppSEM(String phoneNumber, String patentCarAssociated, MovementState movementState) {
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 		this.appMode = new ManualModeStrategy();
 		this.phoneNumber = phoneNumber;
 		this.patentCarAssociated = patentCarAssociated;
 		this.timeUtil = new TimeUtil();
-	}
-
-	public AppSEM(ParkingMode manual) {
+		this.movementState = movementState;
 	}
 
 	public double getMaxHours(String phoneNumber) {
@@ -137,6 +137,14 @@ public class AppSEM implements MovementSensor {
 		return parkingSystem;
 	}
 
+	public MovementState getMovementState() {
+		return movementState;
+	}
+
+	public void setMovementState(MovementState movementState) {
+		this.movementState = movementState;
+	}
+
 	private void validateBalance(Double balance) throws InsufficientBalanceException {
 		if(balance == 0) {
 			throw new InsufficientBalanceException("Insufficient balance. Parking not allowed.");
@@ -151,11 +159,11 @@ public class AppSEM implements MovementSensor {
 
 	@Override
 	public void driving() {
-		this.appMode.manageEndParking(this);
+		this.movementState.startDriving(this);
 	}
 
 	@Override
 	public void walking() {
-		this.appMode.manageStartParking(this);
+		this.movementState.startWalking(this);
 	}
 }
