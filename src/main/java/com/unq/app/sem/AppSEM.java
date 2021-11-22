@@ -23,6 +23,8 @@ public class AppSEM implements MovementSensor {
 	private String phoneNumber;
 	private String patentCarAssociated;
 
+	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
+
 	public AppSEM(String phoneNumber, String patentCarAssociated) {
 		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 		this.appMode = new ManualModeStrategy();
@@ -35,13 +37,13 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public double getMaxHours(String phoneNumber) {
-		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
+		Double balance = parkingSystem.getBalance(phoneNumber);
 		return balance / ParkingSystem.PRICE_PER_HOUR;
 	}
 
 	public StartParkingResponse startParking() {
 		LocalTime now = timeUtil.nowTime();
-		Double balance = ParkingSystem.getInstance().getBalance(phoneNumber);
+		Double balance = parkingSystem.getBalance(phoneNumber);
 
 		try {
 			this.validateBalance(balance);
@@ -73,7 +75,7 @@ public class AppSEM implements MovementSensor {
 
 		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
 
-		ParkingSystem.getInstance().reduceBalance(phoneNumber, cost);
+		parkingSystem.reduceBalance(phoneNumber, cost);
 
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())
@@ -129,6 +131,10 @@ public class AppSEM implements MovementSensor {
 
 	public void setPatentCarAssociated(String patentCarAssociated) {
 		this.patentCarAssociated = patentCarAssociated;
+	}
+
+	public ParkingSystem getParkingSystem() {
+		return parkingSystem;
 	}
 
 	private void validateBalance(Double balance) throws InsufficientBalanceException {

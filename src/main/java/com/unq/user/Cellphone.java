@@ -16,6 +16,8 @@ public class Cellphone implements AlertListener {
     private String patentCarAssociated;
     private AppSEM app;
 
+    private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
+
     public Cellphone(String phoneNumber, String patentCarAssociated) {
         this.phoneNumber = phoneNumber;
         this.patentCarAssociated = patentCarAssociated;
@@ -26,7 +28,7 @@ public class Cellphone implements AlertListener {
     }
 
     public Double getBalance() {
-        return ParkingSystem.getInstance().getBalance(phoneNumber);
+        return parkingSystem.getBalance(phoneNumber);
     }
 
     public StartParkingResponse startParking() {

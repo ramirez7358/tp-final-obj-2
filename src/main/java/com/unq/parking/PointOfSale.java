@@ -10,6 +10,9 @@ public class PointOfSale {
 	private ParkingArea area;
 	private TimeUtil timeUtil;
 
+	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
+	private final ShoppingRecord shoppingRecord = ShoppingRecord.getInstance();
+
 	public PointOfSale(ParkingArea area) {
 		this.area = area;
 		this.timeUtil = new TimeUtil();
@@ -18,8 +21,8 @@ public class PointOfSale {
 	public void buyCredit(String phoneNumber, Double amount) {
 		BalancePurchase purchase = new BalancePurchase(area, timeUtil.nowDateTime(), amount, phoneNumber);
 
-		ParkingSystem.getInstance().increaseBalance(phoneNumber, amount);
-		ShoppingRecord.getInstance().addPurchase(purchase);
+		parkingSystem.increaseBalance(phoneNumber, amount);
+		shoppingRecord.addPurchase(purchase);
 	}
 
 	public void buyHours(Integer hours, String patent, String phoneNumber) {
@@ -27,8 +30,8 @@ public class PointOfSale {
 
 		double cost = ParkingSystem.PRICE_PER_HOUR * hours;
 
-		ParkingSystem.getInstance().reduceBalance(phoneNumber,cost);
-		ShoppingRecord.getInstance().addPurchase(purchase);
+		parkingSystem.reduceBalance(phoneNumber,cost);
+		shoppingRecord.addPurchase(purchase);
 
 		ParkingPerPurchase parking = new ParkingPerPurchase(patent, timeUtil.nowTime().plusHours(hours), purchase);
 

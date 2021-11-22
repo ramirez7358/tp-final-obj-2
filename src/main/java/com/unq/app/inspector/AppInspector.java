@@ -7,6 +7,7 @@ import com.unq.parking.ParkingArea;
 
 public class AppInspector {
 
+	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
 	private TimeUtil timeUtil;
 	
 	public AppInspector() {
@@ -21,7 +22,7 @@ public class AppInspector {
 
 	public void registryViolation(ParkingArea area, String patent, Inspector inspector) {
 		Violation violation = new Violation(patent, timeUtil.nowDateTime(), inspector, area);
-		ParkingSystem.getInstance().registryViolation(violation);
+		parkingSystem.registryViolation(violation);
 	}
 
 	public TimeUtil getTimeUtil() {
@@ -30,5 +31,9 @@ public class AppInspector {
 
 	public void setTimeUtil(TimeUtil timeUtil) {
 		this.timeUtil = timeUtil;
+	}
+
+	public ParkingSystem getParkingSystem() {
+		return parkingSystem;
 	}
 }
