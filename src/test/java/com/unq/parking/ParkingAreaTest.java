@@ -1,5 +1,6 @@
 package com.unq.parking;
 
+import com.unq.alert.AlertManager;
 import com.unq.app.inspector.Inspector;
 import com.unq.commons.TimeUtil;
 import org.junit.jupiter.api.Assertions;
@@ -13,12 +14,14 @@ public class ParkingAreaTest {
     private ParkingArea area;
     private Inspector inspector;
     private TimeUtil timeUtil;
+    private AlertManager alertManager;
 
     @BeforeEach
     public void setUp() {
         inspector = mock(Inspector.class);
         timeUtil = mock(TimeUtil.class);
-        area = new ParkingArea(inspector);
+        alertManager = mock(AlertManager.class);
+        area = new ParkingArea(inspector, alertManager);
         area.setTimeUtil(timeUtil);
     }
 

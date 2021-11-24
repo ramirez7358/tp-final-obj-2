@@ -6,7 +6,7 @@ public class WalkingState implements MovementState{
     @Override
     public void startDriving(AppSEM app) {
         app.setMovementState(new DrivingState());
-        app.getAppMode().manageEndParking(app);
+        app.manageEndParking();
     }
 
     @Override

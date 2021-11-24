@@ -15,11 +15,11 @@ public class ParkingSystem {
 	private List<ParkingArea> areas;
 	private List<Violation> violations;
 	private TimeUtil timeUtil;
+	private LocalTime startTime;
+	private LocalTime endTime;
+	private double pricePerHour;
 
 	private static ParkingSystem instance;
-	public static final LocalTime START_TIME = LocalTime.of(7,0,0);
-	public static final LocalTime END_TIME = LocalTime.of(20,0,0);
-	public static final double PRICE_PER_HOUR = 40;
 	private final AlertManager alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 
 	private ParkingSystem() {
@@ -27,6 +27,9 @@ public class ParkingSystem {
 		this.areas = new ArrayList<>();
 		this.violations = new ArrayList<>();
 		this.timeUtil = new TimeUtil();
+		this.startTime = LocalTime.of(7,0,0);
+		this.endTime = LocalTime.of(20,0,0);
+		this.pricePerHour = 40;
 	}
 
 	public static ParkingSystem getInstance() {
@@ -42,8 +45,13 @@ public class ParkingSystem {
 		this.alertManager.subscribe(AlertType.END_PARKING, alertListener);
 	}
 
+	public void unsubscribeParkingMonitoring(AlertListener alertListener) {
+		this.alertManager.unsubscribe(AlertType.START_PARKING, alertListener);
+		this.alertManager.unsubscribe(AlertType.END_PARKING, alertListener);
+	}
+
 	public void finalizeAllCurrentParking() {
-		if(timeUtil.nowTime().isAfter(END_TIME)) {
+		if(timeUtil.nowTime().isAfter(this.endTime)) {
 			this.areas.forEach(a -> {
 				a.getParkings()
 						.entrySet()
@@ -76,7 +84,6 @@ public class ParkingSystem {
 			Double balance = balances.get(phoneNumber);
 			balances.put(phoneNumber, balance - amount);
 		}else {
-
 			System.out.println("The user has no registered credit.");
 		}
 	}
@@ -105,15 +112,43 @@ public class ParkingSystem {
 		this.violations = violations;
 	}
 
-	public static void setInstance(ParkingSystem instance) {
-		ParkingSystem.instance = instance;
-	}
-
 	public TimeUtil getTimeUtil() {
 		return timeUtil;
 	}
 
 	public void setTimeUtil(TimeUtil timeUtil) {
 		this.timeUtil = timeUtil;
+	}
+
+	public LocalTime getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public LocalTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
+
+	public double getPricePerHour() {
+		return pricePerHour;
+	}
+
+	public void setPricePerHour(double pricePerHour) {
+		this.pricePerHour = pricePerHour;
+	}
+
+	public static void setInstance(ParkingSystem instance) {
+		ParkingSystem.instance = instance;
+	}
+
+	public AlertManager getAlertManager() {
+		return alertManager;
 	}
 }

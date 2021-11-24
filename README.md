@@ -1,5 +1,30 @@
 # TPFinalObj2
 
+Correciones:
+
+La logica de la detecciones de desplazamiento esta bien?
+
+Ahora se puede suscribir al Parking system para monitoriar los estacionamientos. 
+¿Esta bien pasarle a cada area el alert manager?
+
+Cuando finalizo todos los estacionamientos, hay que descontar el credito del que creo el estacionamiento.
+
+Hice un metodo en la clase AppSEM que recibe un string y lo muestro por System.out.printl en vez tener los sysout
+esparcidos por ahi.
+
+Los singleton en vez de accederlos directamente ahora los guardo en un atributo de la clase.
+¿Esta bien o esta mal usar singleton para estos casos?
+
+Verificar la implementacion de exist parking con stream en Parking Area
+
+StartParkingResponse y EndParkingResponse son solo objetos de respuesta, por eso no tienen comportamiento.
+¿Esto esta mal?
+
+Elimine la clase Car y Cellphone y ahora toda esa info esta en la AppSEM.
+Time util se creo por que no sabia como mockear los metodos staticos de LocalTime y LocalDateTime
+
+Cambie la implementacion de inForce en Parking pero sigue siendo parecida.
+
 ## Casos de uso
 
 ### Registrar un parking manual (compra puntual)

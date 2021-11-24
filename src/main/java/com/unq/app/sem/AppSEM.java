@@ -1,7 +1,6 @@
 package com.unq.app.sem;
 
 
-import com.unq.alert.AlertListener;
 import com.unq.app.sem.mode.ManualModeStrategy;
 import com.unq.app.sem.mode.ModeStrategy;
 import com.unq.app.sem.movement.MovementState;
@@ -18,7 +17,7 @@ import java.time.temporal.ChronoUnit;
 
 import com.unq.exceptions.CustomException.*;
 
-public class AppSEM implements MovementSensor, AlertListener {
+public class AppSEM implements MovementSensor {
 	private ParkingArea currentArea;
 	private AlertManager alertManager;
 	private ModeStrategy appMode;
@@ -44,11 +43,19 @@ public class AppSEM implements MovementSensor, AlertListener {
 
 	public double getMaxHours() {
 		Double balance = parkingSystem.getBalance(phoneNumber);
-		return balance / ParkingSystem.PRICE_PER_HOUR;
+		return balance / parkingSystem.getPricePerHour();
 	}
 
 	public double getBalance() {
 		return parkingSystem.getBalance(phoneNumber);
+	}
+
+	public void manageStartParking() {
+		this.appMode.manageStartParking(this);
+	}
+
+	public void manageEndParking() {
+		this.appMode.manageEndParking(this);
 	}
 
 	public StartParkingResponse startParking() {
@@ -59,7 +66,7 @@ public class AppSEM implements MovementSensor, AlertListener {
 			this.validateBalance(balance);
 			this.validateHour(now);
 		} catch (InsufficientBalanceException e) {
-			//throw new InsufficientBalanceException(e.getMessage());
+			throw new InsufficientBalanceException(e.getMessage());
 		}
 
 		double estimatedEndTime = now.getHour() + this.getMaxHours();
@@ -83,10 +90,11 @@ public class AppSEM implements MovementSensor, AlertListener {
 				minutes % 60
 		);
 
-		double cost = minutes * (ParkingSystem.PRICE_PER_HOUR/60);
+		double cost = minutes * (parkingSystem.getPricePerHour()/60);
 
 		parkingSystem.reduceBalance(phoneNumber, cost);
 
+		// Guardarlo en collection
 		return EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())
 				.endHour(timeUtil.nowTime())
@@ -162,7 +170,7 @@ public class AppSEM implements MovementSensor, AlertListener {
 	}
 
 	private void validateHour(LocalTime time) throws InsufficientBalanceException {
-		if(time.isBefore(ParkingSystem.START_TIME) || time.isAfter(ParkingSystem.END_TIME)) {
+		if(time.isBefore(parkingSystem.getStartTime()) || time.isAfter(parkingSystem.getEndTime())) {
 			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
 		}
 	}
@@ -175,10 +183,5 @@ public class AppSEM implements MovementSensor, AlertListener {
 	@Override
 	public void walking() {
 		this.movementState.startWalking(this);
-	}
-
-	@Override
-	public void update(AlertType alertType, String data) {
-
 	}
 }
