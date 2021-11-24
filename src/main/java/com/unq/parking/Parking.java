@@ -16,7 +16,12 @@ public abstract class Parking {
         this.creationTime = timeUtil.nowTime();
     }
 
-    public abstract Boolean inForce();
+    public Boolean inForce(){
+        LocalTime now = this.getTimeUtil().nowTime();
+        return now.isAfter(this.getCreationTime()) && now.isBefore(timeLimit());
+    }
+
+    public abstract LocalTime timeLimit();
 
     public String getCarPatent() {
         return carPatent;

@@ -14,9 +14,8 @@ public class ParkingPerPurchase extends Parking{
     }
 
     @Override
-    public Boolean inForce() {
-        LocalTime now = this.getTimeUtil().nowTime();
-        return now.isAfter(this.getCreationTime()) && now.isBefore(this.getEndTime());
+    public LocalTime timeLimit() {
+        return this.getEndTime();
     }
 
     public Purchase getPurchaseRegistry() {

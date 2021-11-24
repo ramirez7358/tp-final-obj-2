@@ -14,9 +14,8 @@ public class ParkingPerApp extends Parking {
     }
 
     @Override
-    public Boolean inForce() {
-        LocalTime now = this.getTimeUtil().nowTime();
-        return now.isAfter(this.getCreationTime()) && now.isBefore(parkingSystem.getEndTime());
+    public LocalTime timeLimit() {
+        return parkingSystem.getEndTime();
     }
 
     public String getPhoneNumber() {
