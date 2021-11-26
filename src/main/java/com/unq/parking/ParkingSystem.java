@@ -5,6 +5,7 @@ import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.app.inspector.Violation;
 import com.unq.commons.TimeUtil;
+import com.unq.exceptions.CustomException;
 
 import java.time.LocalTime;
 import java.util.*;
@@ -84,7 +85,7 @@ public class ParkingSystem {
 			Double balance = balances.get(phoneNumber);
 			balances.put(phoneNumber, balance - amount);
 		}else {
-			System.out.println("The user has no registered credit.");
+			throw new CustomException.UserNotFoundException("The user has no registered credit.");
 		}
 	}
 

@@ -1,10 +1,9 @@
-package com.unq.app.sem;
+package com.unq.app.sem.activities;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class StartParkingResponse {
-	
+public class StartParkingResponse extends Activity {
+
 	private LocalTime startHour;
 	private Double maxHour;
 	

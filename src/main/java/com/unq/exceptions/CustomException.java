@@ -12,4 +12,10 @@ public class CustomException extends RuntimeException{
         }
     }
 
+    public static class UserNotFoundException extends CustomException {
+        public UserNotFoundException(String message) {
+            super(message);
+        }
+    }
+
 }

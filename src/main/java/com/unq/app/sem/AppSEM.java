@@ -1,6 +1,9 @@
 package com.unq.app.sem;
 
 
+import com.unq.app.sem.activities.Activity;
+import com.unq.app.sem.activities.EndParkingResponse;
+import com.unq.app.sem.activities.StartParkingResponse;
 import com.unq.app.sem.mode.ManualModeStrategy;
 import com.unq.app.sem.mode.ModeStrategy;
 import com.unq.app.sem.movement.MovementState;
@@ -14,6 +17,8 @@ import com.unq.parking.ParkingPerApp;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.unq.exceptions.CustomException.*;
 
@@ -25,6 +30,7 @@ public class AppSEM implements MovementSensor {
 	private String phoneNumber;
 	private String patentCarAssociated;
 	private MovementState movementState;
+	private List<Activity> activityHistory;
 
 	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
 
@@ -35,6 +41,7 @@ public class AppSEM implements MovementSensor {
 		this.patentCarAssociated = patentCarAssociated;
 		this.timeUtil = new TimeUtil();
 		this.movementState = movementState;
+		this.activityHistory = new ArrayList<>();
 	}
 
 	public void showMessage(String message) {
@@ -58,7 +65,7 @@ public class AppSEM implements MovementSensor {
 		this.appMode.manageEndParking(this);
 	}
 
-	public StartParkingResponse startParking() {
+	public void startParking() {
 		LocalTime now = timeUtil.nowTime();
 		Double balance = this.getBalance();
 
@@ -74,13 +81,15 @@ public class AppSEM implements MovementSensor {
 		ParkingPerApp parking = new ParkingPerApp(patentCarAssociated, phoneNumber);
 		currentArea.createParking(phoneNumber, parking);
 
-		return StartParkingResponse.newBuilder()
+		StartParkingResponse activity = StartParkingResponse.newBuilder()
 				.startHour(now)
 				.maxHour(estimatedEndTime >= 20 ? 20D : estimatedEndTime)
 				.build();
+
+		this.activityHistory.add(activity);
 	}
 
-	public EndParkingResponse endParking() {
+	public void endParking() {
 		Parking parking = currentArea.removeParking(phoneNumber);
 
 		long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.nowTime());
@@ -95,12 +104,14 @@ public class AppSEM implements MovementSensor {
 		parkingSystem.reduceBalance(phoneNumber, cost);
 
 		// Guardarlo en collection
-		return EndParkingResponse.newBuilder()
+		EndParkingResponse activity = EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())
 				.endHour(timeUtil.nowTime())
 				.duration(duration)
 				.cost(cost)
 				.build();
+
+		this.activityHistory.add(activity);
 	}
 
 	public ParkingArea getCurrentArea() {
@@ -161,6 +172,14 @@ public class AppSEM implements MovementSensor {
 
 	public void setMovementState(MovementState movementState) {
 		this.movementState = movementState;
+	}
+
+	public List<Activity> getActivityHistory() {
+		return activityHistory;
+	}
+
+	public void setActivityHistory(List<Activity> activityHistory) {
+		this.activityHistory = activityHistory;
 	}
 
 	private void validateBalance(Double balance) throws InsufficientBalanceException {

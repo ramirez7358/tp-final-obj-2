@@ -1,8 +1,10 @@
-package com.unq.app.sem;
+package com.unq.app.sem.activities;
+
+import com.unq.app.sem.Duration;
 
 import java.time.LocalTime;
 
-public class EndParkingResponse {
+public class EndParkingResponse extends Activity {
 	
 	private LocalTime startHour;
 	private LocalTime endHour;
