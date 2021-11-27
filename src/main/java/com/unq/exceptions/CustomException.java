@@ -24,4 +24,16 @@ public class CustomException extends RuntimeException{
         }
     }
 
+    public static class ParkingNotFound extends CustomException {
+        public ParkingNotFound(String message) {
+            super(message);
+        }
+    }
+
+    public static class InspectionException extends CustomException {
+        public InspectionException(String message) {
+            super(message);
+        }
+    }
+
 }

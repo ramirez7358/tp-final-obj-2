@@ -4,6 +4,7 @@ import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.commons.TimeUtil;
 import com.unq.app.inspector.Inspector;
+import com.unq.exceptions.CustomException;
 
 import java.util.*;
 
@@ -46,13 +47,13 @@ public class ParkingArea {
 		return parking;
 	}
 
-	public Parking getParkingByPatent(String patent) throws Exception {
+	public Parking getParkingByPatent(String patent) {
 		Optional<Parking> parking = parkings.values().stream().filter(p -> p.getCarPatent().equals(patent)).findAny();
 
 		if(parking.isPresent()) {
 			return parking.get();
 		}else {
-			throw new Exception(String.format("No parking associated with the patent was found: %s", patent));
+			throw new CustomException.ParkingNotFound(String.format("No parking associated with the patent was found: %s", patent));
 		}
 	}
 

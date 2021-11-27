@@ -22,31 +22,16 @@ public class Violation {
         return patent;
     }
 
-    public void setPatent(String patent) {
-        this.patent = patent;
-    }
 
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
     }
 
     public Inspector getInspector() {
         return inspector;
     }
 
-    public void setInspector(Inspector inspector) {
-        this.inspector = inspector;
-    }
-
     public ParkingArea getParkingArea() {
         return parkingArea;
-    }
-
-    public void setParkingArea(ParkingArea parkingArea) {
-        this.parkingArea = parkingArea;
     }
 }

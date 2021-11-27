@@ -1,49 +1,38 @@
 package com.unq.app.inspector;
 
-import com.unq.commons.TimeUtil;
 import com.unq.parking.ParkingArea;
 
 public class Inspector {
 
-	private AppInspector app;
-	private ParkingArea area;
-	private TimeUtil timeUtil;
+	private String name;
+	private String lastName;
+	private String dni;
+	private ParkingArea parkingArea;
 
-	public Inspector(AppInspector app, ParkingArea area) {
-		this.app = app;
-		this.area = area;
-		this.timeUtil = new TimeUtil();
+	public Inspector(String name, String lastName, String dni, ParkingArea parkingArea) {
+		this.name = name;
+		this.lastName = lastName;
+		this.dni = dni;
+		this.parkingArea = parkingArea;
 	}
 
-	public Boolean checkParkingValid(String patent) throws Exception {
-		return this.app.checkParkingValid(area, patent);
+	public String getName() {
+		return name;
 	}
 
-	public void createViolation(String patent) {
-		this.app.registryViolation(area, patent,this);
+	public String getLastName() {
+		return lastName;
 	}
 
-	public AppInspector getApp() {
-		return app;
+	public String getDni() {
+		return dni;
 	}
 
-	public void setApp(AppInspector app) {
-		this.app = app;
+	public ParkingArea getParkingArea() {
+		return parkingArea;
 	}
 
-	public ParkingArea getArea() {
-		return area;
-	}
-
-	public void setArea(ParkingArea area) {
-		this.area = area;
-	}
-
-	public TimeUtil getTimeUtil() {
-		return timeUtil;
-	}
-
-	public void setTimeUtil(TimeUtil timeUtil) {
-		this.timeUtil = timeUtil;
+	public void setParkingArea(ParkingArea parkingArea) {
+		this.parkingArea = parkingArea;
 	}
 }

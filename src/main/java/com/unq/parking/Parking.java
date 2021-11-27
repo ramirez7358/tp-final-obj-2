@@ -17,7 +17,7 @@ public abstract class Parking {
     }
 
     public Boolean inForce(){
-        LocalTime now = this.getTimeUtil().nowTime();
+        LocalTime now = timeUtil.nowTime();
         return now.isAfter(this.getCreationTime()) && now.isBefore(timeLimit());
     }
 
