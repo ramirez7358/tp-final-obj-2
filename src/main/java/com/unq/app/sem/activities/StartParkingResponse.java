@@ -21,22 +21,6 @@ public class StartParkingResponse implements Activity {
 		return new Builder();
 	}
 
-	public LocalTime getStartHour() {
-		return startHour;
-	}
-
-	public void setStartHour(LocalTime startHour) {
-		this.startHour = startHour;
-	}
-
-	public LocalTime getMaxHour() {
-		return maxHour;
-	}
-
-	public void setMaxHour(LocalTime maxHour) {
-		this.maxHour = maxHour;
-	}
-
 	@Override
 	public String message() {
 		return String.format(

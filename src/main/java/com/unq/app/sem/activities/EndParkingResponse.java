@@ -22,38 +22,6 @@ public class EndParkingResponse implements Activity {
 		return new Builder();
 	}
 
-	public LocalTime getStartHour() {
-		return startHour;
-	}
-
-	public void setStartHour(LocalTime startHour) {
-		this.startHour = startHour;
-	}
-
-	public LocalTime getEndHour() {
-		return endHour;
-	}
-
-	public void setEndHour(LocalTime endHour) {
-		this.endHour = endHour;
-	}
-
-	public Duration getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Duration duration) {
-		this.duration = duration;
-	}
-
-	public Double getCost() {
-		return cost;
-	}
-
-	public void setCost(Double cost) {
-		this.cost = cost;
-	}
-
 	@Override
 	public String message() {
 		return String.format(

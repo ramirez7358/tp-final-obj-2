@@ -14,15 +14,7 @@ public class Duration {
         return hours;
     }
 
-    public void setHours(Long hours) {
-        this.hours = hours;
-    }
-
     public Long getMinutes() {
         return minutes;
-    }
-
-    public void setMinutes(Long minutes) {
-        this.minutes = minutes;
     }
 }
