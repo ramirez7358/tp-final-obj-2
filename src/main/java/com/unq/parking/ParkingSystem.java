@@ -51,6 +51,10 @@ public class ParkingSystem {
 		this.alertManager.unsubscribe(AlertType.END_PARKING, alertListener);
 	}
 
+	public void notifyMonitors(AlertType alertType, String data) {
+		this.alertManager.notify(alertType, data);
+	}
+
 	public void finalizeAllCurrentParking() {
 		if(timeUtil.nowTime().isAfter(this.endTime)) {
 			this.areas.forEach(a -> {

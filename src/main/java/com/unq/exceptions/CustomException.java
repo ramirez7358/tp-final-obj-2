@@ -12,6 +12,12 @@ public class CustomException extends RuntimeException{
         }
     }
 
+    public static class HourOutOfRangeException extends CustomException {
+        public HourOutOfRangeException(String message) {
+            super(message);
+        }
+    }
+
     public static class UserNotFoundException extends CustomException {
         public UserNotFoundException(String message) {
             super(message);

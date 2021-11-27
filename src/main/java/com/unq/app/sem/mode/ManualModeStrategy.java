@@ -6,11 +6,11 @@ import com.unq.app.sem.AppSEM;
 public class ManualModeStrategy implements ModeStrategy{
     @Override
     public void manageStartParking(AppSEM app) {
-        app.getAlertManager().notify(AlertType.START_PARKING, "You haven't started the parking lot.");
+        app.sendNotification(AlertType.START_PARKING, "You haven't started the parking lot.");
     }
 
     @Override
     public void manageEndParking(AppSEM app) {
-        app.getAlertManager().notify(AlertType.END_PARKING, "You haven't finished parking.");
+        app.sendNotification(AlertType.END_PARKING, "You haven't finished parking.");
     }
 }

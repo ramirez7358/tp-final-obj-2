@@ -2,12 +2,12 @@ package com.unq.app.sem.activities;
 
 import java.time.LocalTime;
 
-public class StartParkingResponse extends Activity {
+public class StartParkingResponse implements Activity {
 
 	private LocalTime startHour;
-	private Double maxHour;
+	private LocalTime maxHour;
 	
-	public StartParkingResponse(LocalTime startHour, Double maxHour) {
+	public StartParkingResponse(LocalTime startHour, LocalTime maxHour) {
 		this.startHour = startHour;
 		this.maxHour = maxHour;
 	}
@@ -29,24 +29,33 @@ public class StartParkingResponse extends Activity {
 		this.startHour = startHour;
 	}
 
-	public Double getMaxHour() {
+	public LocalTime getMaxHour() {
 		return maxHour;
 	}
 
-	public void setMaxHour(Double maxHour) {
+	public void setMaxHour(LocalTime maxHour) {
 		this.maxHour = maxHour;
+	}
+
+	@Override
+	public String message() {
+		return String.format(
+				"Start parking with the following information: Start hour: %s, Max hours: %s",
+				this.startHour,
+				this.maxHour
+		);
 	}
 
 	public static class Builder {
 		private LocalTime startHour;
-		private Double maxHour;
+		private LocalTime maxHour;
 
 		public Builder startHour(LocalTime startHour) {
 			this.startHour = startHour;
 			return this;
 		}
 
-		public Builder maxHour(Double maxHour) {
+		public Builder maxHour(LocalTime maxHour) {
 			this.maxHour = maxHour;
 			return this;
 		}

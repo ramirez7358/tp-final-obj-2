@@ -1,6 +1,7 @@
 package com.unq.app.sem;
 
 
+import com.unq.alert.AlertType;
 import com.unq.app.sem.activities.Activity;
 import com.unq.app.sem.activities.EndParkingResponse;
 import com.unq.app.sem.activities.StartParkingResponse;
@@ -10,8 +11,6 @@ import com.unq.app.sem.movement.MovementState;
 import com.unq.parking.ParkingArea;
 import com.unq.parking.ParkingSystem;
 import com.unq.commons.TimeUtil;
-import com.unq.alert.AlertManager;
-import com.unq.alert.AlertType;
 import com.unq.parking.Parking;
 import com.unq.parking.ParkingPerApp;
 
@@ -24,28 +23,22 @@ import com.unq.exceptions.CustomException.*;
 
 public class AppSEM implements MovementSensor {
 	private ParkingArea currentArea;
-	private AlertManager alertManager;
 	private ModeStrategy appMode;
 	private TimeUtil timeUtil;
 	private String phoneNumber;
 	private String patentCarAssociated;
 	private MovementState movementState;
+	private ParkingSystem parkingSystem;
 	private List<Activity> activityHistory;
 
-	private final ParkingSystem parkingSystem = ParkingSystem.getInstance();
-
 	public AppSEM(String phoneNumber, String patentCarAssociated, MovementState movementState) {
-		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 		this.appMode = new ManualModeStrategy();
 		this.phoneNumber = phoneNumber;
 		this.patentCarAssociated = patentCarAssociated;
 		this.timeUtil = new TimeUtil();
 		this.movementState = movementState;
+		this.parkingSystem = ParkingSystem.getInstance();
 		this.activityHistory = new ArrayList<>();
-	}
-
-	public void showMessage(String message) {
-		System.out.println(message);
 	}
 
 	public double getMaxHours() {
@@ -65,28 +58,29 @@ public class AppSEM implements MovementSensor {
 		this.appMode.manageEndParking(this);
 	}
 
+	public void sendNotification(AlertType alertType, String data) {
+		this.parkingSystem.notifyMonitors(alertType, data);
+	}
+
 	public void startParking() {
 		LocalTime now = timeUtil.nowTime();
 		Double balance = this.getBalance();
 
-		try {
-			this.validateBalance(balance);
-			this.validateHour(now);
-		} catch (InsufficientBalanceException e) {
-			throw new InsufficientBalanceException(e.getMessage());
-		}
+		this.validateBalance(balance);
+		this.validateHour(now);
 
-		double estimatedEndTime = now.getHour() + this.getMaxHours();
+		LocalTime estimatedEndTime = now.plusHours((long) this.getMaxHours());
 
 		ParkingPerApp parking = new ParkingPerApp(patentCarAssociated, phoneNumber);
 		currentArea.createParking(phoneNumber, parking);
 
 		StartParkingResponse activity = StartParkingResponse.newBuilder()
 				.startHour(now)
-				.maxHour(estimatedEndTime >= 20 ? 20D : estimatedEndTime)
+				.maxHour(estimatedEndTime.isAfter(parkingSystem.getEndTime()) ? parkingSystem.getEndTime() : estimatedEndTime)
 				.build();
 
 		this.activityHistory.add(activity);
+		this.sendNotification(AlertType.START_PARKING, activity.message());
 	}
 
 	public void endParking() {
@@ -103,7 +97,6 @@ public class AppSEM implements MovementSensor {
 
 		parkingSystem.reduceBalance(phoneNumber, cost);
 
-		// Guardarlo en collection
 		EndParkingResponse activity = EndParkingResponse.newBuilder()
 				.startHour(parking.getCreationTime())
 				.endHour(timeUtil.nowTime())
@@ -112,6 +105,7 @@ public class AppSEM implements MovementSensor {
 				.build();
 
 		this.activityHistory.add(activity);
+		this.sendNotification(AlertType.END_PARKING, activity.message());
 	}
 
 	public ParkingArea getCurrentArea() {
@@ -120,14 +114,6 @@ public class AppSEM implements MovementSensor {
 
 	public void setCurrentArea(ParkingArea currentArea) {
 		this.currentArea = currentArea;
-	}
-
-	public AlertManager getAlertManager() {
-		return alertManager;
-	}
-
-	public void setAlertManager(AlertManager alertManager) {
-		this.alertManager = alertManager;
 	}
 
 	public ModeStrategy getAppMode() {
@@ -166,6 +152,10 @@ public class AppSEM implements MovementSensor {
 		return parkingSystem;
 	}
 
+	public void setParkingSystem(ParkingSystem parkingSystem) {
+		this.parkingSystem = parkingSystem;
+	}
+
 	public MovementState getMovementState() {
 		return movementState;
 	}
@@ -190,7 +180,13 @@ public class AppSEM implements MovementSensor {
 
 	private void validateHour(LocalTime time) throws InsufficientBalanceException {
 		if(time.isBefore(parkingSystem.getStartTime()) || time.isAfter(parkingSystem.getEndTime())) {
-			throw new InsufficientBalanceException("It is not possible to generate a parking lot outside the time range 8 - 20");
+			throw new HourOutOfRangeException(
+					String.format(
+							"It is not possible to generate a parking lot outside the time range %s - %s",
+							parkingSystem.getStartTime(),
+							parkingSystem.getEndTime()
+					)
+			);
 		}
 	}
 

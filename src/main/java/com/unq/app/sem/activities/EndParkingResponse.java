@@ -4,7 +4,7 @@ import com.unq.app.sem.Duration;
 
 import java.time.LocalTime;
 
-public class EndParkingResponse extends Activity {
+public class EndParkingResponse implements Activity {
 	
 	private LocalTime startHour;
 	private LocalTime endHour;
@@ -52,6 +52,18 @@ public class EndParkingResponse extends Activity {
 
 	public void setCost(Double cost) {
 		this.cost = cost;
+	}
+
+	@Override
+	public String message() {
+		return String.format(
+				"End parking with the following information: Start hour: %s, End hour: %s, Duration: %s:%s, Cost:%s",
+				this.startHour,
+				this.endHour,
+				this.duration.getHours(),
+				this.duration.getMinutes(),
+				this.cost
+		);
 	}
 
 	public static class Builder {
