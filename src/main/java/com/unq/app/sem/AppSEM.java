@@ -108,10 +108,6 @@ public class AppSEM implements MovementSensor {
 		this.sendNotification(AlertType.END_PARKING, activity.message());
 	}
 
-	public ParkingArea getCurrentArea() {
-		return currentArea;
-	}
-
 	public void setCurrentArea(ParkingArea currentArea) {
 		this.currentArea = currentArea;
 	}
@@ -124,32 +120,8 @@ public class AppSEM implements MovementSensor {
 		this.appMode = appMode;
 	}
 
-	public TimeUtil getTimeUtil() {
-		return timeUtil;
-	}
-
 	public void setTimeUtil(TimeUtil timeUtil) {
 		this.timeUtil = timeUtil;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getPatentCarAssociated() {
-		return patentCarAssociated;
-	}
-
-	public void setPatentCarAssociated(String patentCarAssociated) {
-		this.patentCarAssociated = patentCarAssociated;
-	}
-
-	public ParkingSystem getParkingSystem() {
-		return parkingSystem;
 	}
 
 	public void setParkingSystem(ParkingSystem parkingSystem) {
@@ -157,7 +129,7 @@ public class AppSEM implements MovementSensor {
 	}
 
 	public MovementState getMovementState() {
-		return movementState;
+		return this.movementState;
 	}
 
 	public void setMovementState(MovementState movementState) {
@@ -166,10 +138,6 @@ public class AppSEM implements MovementSensor {
 
 	public List<Activity> getActivityHistory() {
 		return activityHistory;
-	}
-
-	public void setActivityHistory(List<Activity> activityHistory) {
-		this.activityHistory = activityHistory;
 	}
 
 	private void validateBalance(Double balance) throws InsufficientBalanceException {

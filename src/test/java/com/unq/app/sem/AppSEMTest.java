@@ -1,12 +1,13 @@
 package com.unq.app.sem;
 
-import com.unq.alert.AlertManager;
 import com.unq.alert.AlertType;
 import com.unq.app.sem.activities.EndParkingResponse;
 import com.unq.app.sem.activities.StartParkingResponse;
 import com.unq.app.sem.mode.AutomaticModeStrategy;
 import com.unq.app.sem.mode.ManualModeStrategy;
+import com.unq.app.sem.movement.DrivingState;
 import com.unq.app.sem.movement.MovementState;
+import com.unq.app.sem.movement.WalkingState;
 import com.unq.exceptions.CustomException;
 import com.unq.parking.ParkingArea;
 import com.unq.commons.TimeUtil;
@@ -25,7 +26,8 @@ import static org.mockito.Mockito.*;
 
 public class AppSEMTest {
 
-    private static MovementState movementState;
+    private static MovementState drivingState;
+    private static MovementState walkingState;
     private static ManualModeStrategy manualModeStrategy;
     private static AutomaticModeStrategy automaticModeStrategy;
     private static ParkingArea parkingArea;
@@ -38,14 +40,15 @@ public class AppSEMTest {
 
     @BeforeEach
     public void setUp() {
-        movementState = mock(MovementState.class);
+        drivingState = mock(DrivingState.class);
+        walkingState = mock(WalkingState.class);
         timeUtil = mock(TimeUtil.class);
         manualModeStrategy = mock(ManualModeStrategy.class);
         automaticModeStrategy = mock(AutomaticModeStrategy.class);
         parkingArea = mock(ParkingArea.class);
         parkingSystem = mock(ParkingSystem.class);
 
-        app = new AppSEM(PHONE_NUMBER, PATENT_ASSOCIATED, movementState);
+        app = new AppSEM(PHONE_NUMBER, PATENT_ASSOCIATED, drivingState);
         app.setAppMode(manualModeStrategy);
         app.setCurrentArea(parkingArea);
         app.setParkingSystem(parkingSystem);
@@ -74,7 +77,7 @@ public class AppSEMTest {
 
     @Test
     public void getBalanceOfNewPhoneNumber() {
-        AppSEM newApp = new AppSEM("1136598741", PATENT_ASSOCIATED, movementState);
+        AppSEM newApp = new AppSEM("1136598741", PATENT_ASSOCIATED, drivingState);
         app.setParkingSystem(parkingSystem);
 
         double balance = newApp.getBalance();
@@ -112,6 +115,7 @@ public class AppSEMTest {
 
         verify(automaticModeStrategy, times(1)).manageStartParking(app);
         verifyNoInteractions(manualModeStrategy);
+        assertEquals(automaticModeStrategy, app.getAppMode());
     }
 
     @Test
@@ -121,6 +125,7 @@ public class AppSEMTest {
 
         verify(automaticModeStrategy, times(1)).manageEndParking(app);
         verifyNoInteractions(manualModeStrategy);
+        assertEquals(automaticModeStrategy, app.getAppMode());
     }
 
     @Test
@@ -205,14 +210,21 @@ public class AppSEMTest {
     public void verifyDriving() {
         app.driving();
 
-        verify(movementState, times(1)).startDriving(app);
+        verify(drivingState, times(1)).startDriving(app);
     }
 
     @Test
     public void verifyWalking() {
         app.walking();
 
-        verify(movementState, times(1)).startWalking(app);
+        verify(drivingState, times(1)).startWalking(app);
+    }
+
+    @Test
+    public void changeStateOfApp() {
+        app.setMovementState(walkingState);
+
+        assertEquals(walkingState, app.getMovementState());
     }
 
 }
