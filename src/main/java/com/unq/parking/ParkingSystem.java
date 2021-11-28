@@ -6,6 +6,7 @@ import com.unq.alert.AlertType;
 import com.unq.app.inspector.Violation;
 import com.unq.commons.TimeUtil;
 import com.unq.exceptions.CustomException;
+import com.unq.purchase.Purchase;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -16,6 +17,7 @@ public class ParkingSystem {
 	private Map<String, Double> balances;
 	private List<ParkingArea> areas;
 	private List<Violation> violations;
+	private List<Purchase> shoppingRecord;
 	private TimeUtil timeUtil;
 	private LocalTime startTime;
 	private LocalTime endTime;
@@ -54,6 +56,10 @@ public class ParkingSystem {
 
 	public void notifyMonitors(AlertType alertType, String data) {
 		this.alertManager.notify(alertType, data);
+	}
+
+	public void registryPurchase(Purchase purchase) {
+		this.shoppingRecord.add(purchase);
 	}
 
 	public void finalizeAllCurrentParking() {
@@ -124,6 +130,14 @@ public class ParkingSystem {
 
 	public void setViolations(List<Violation> violations) {
 		this.violations = violations;
+	}
+
+	public List<Purchase> getShoppingRecord() {
+		return shoppingRecord;
+	}
+
+	public void setShoppingRecord(List<Purchase> shoppingRecord) {
+		this.shoppingRecord = shoppingRecord;
 	}
 
 	public TimeUtil getTimeUtil() {

@@ -23,15 +23,7 @@ public class HoursPurchase extends Purchase{
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public String getPatent() {
         return patent;
-    }
-
-    public void setPatent(String patent) {
-        this.patent = patent;
     }
 }
