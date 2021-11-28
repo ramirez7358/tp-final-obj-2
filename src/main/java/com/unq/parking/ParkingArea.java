@@ -7,6 +7,8 @@ import com.unq.app.inspector.Inspector;
 import com.unq.exceptions.CustomException;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class ParkingArea {
@@ -28,6 +30,14 @@ public class ParkingArea {
 
 	public Boolean containPoint(PointOfSale pointOfSale) {
 		return this.pointOfSales.contains(pointOfSale);
+	}
+
+	public String getPhoneNumberByPatent(String patent) {
+		Map.Entry<String, Parking> map = parkings.entrySet().stream()
+				.filter(x -> x.getValue().getCarPatent().equals(patent))
+				.findAny().orElseThrow();
+
+		return map.getKey();
 	}
 
 	public void createParking(String phoneNumber, Parking parking) {

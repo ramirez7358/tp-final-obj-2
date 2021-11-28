@@ -8,6 +8,7 @@ import com.unq.commons.TimeUtil;
 import com.unq.exceptions.CustomException;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class ParkingSystem {
@@ -56,14 +57,22 @@ public class ParkingSystem {
 	}
 
 	public void finalizeAllCurrentParking() {
-		if(timeUtil.nowTime().isAfter(this.endTime)) {
-			this.areas.forEach(a -> {
-				a.getParkings()
-						.entrySet()
-						.stream()
-						.filter(x -> x.getValue().inForce())
-						.forEach(x -> a.removeParking(x.getKey()));
-			});
+		if(timeUtil.nowTime().isAfter(endTime)) {
+			this.areas.forEach(a -> a.getParkings()
+					.entrySet()
+					.stream()
+					.filter(x -> x.getValue().inForce())
+					.forEach(x -> {
+						Parking parking = a.removeParking(x.getKey());
+						String phoneNumber = a.getPhoneNumberByPatent(parking.getCarPatent());
+
+						long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.nowTime());
+
+						double cost = minutes * (pricePerHour/60);
+
+						this.reduceBalance(phoneNumber, cost);
+					})
+			);
 		}
 	}
 
