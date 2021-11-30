@@ -31,8 +31,4 @@ public class AlertManager {
     public Map<AlertType, List<AlertListener>> getListeners() {
         return listeners;
     }
-
-    public void setListeners(Map<AlertType, List<AlertListener>> listeners) {
-        this.listeners = listeners;
-    }
 }
