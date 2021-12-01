@@ -58,8 +58,10 @@ public class AppSEM implements MovementSensor {
 		this.appMode.manageEndParking(this);
 	}
 
+	// Metodo para notificar al usuario
 	public void sendNotification(AlertType alertType, String data) {
-		this.parkingSystem.notifyMonitors(alertType, data);
+		System.out.println(data);
+		//this.parkingSystem.notifyMonitors(alertType, data);
 	}
 
 	public void startParking() {
@@ -71,7 +73,7 @@ public class AppSEM implements MovementSensor {
 
 		LocalTime estimatedEndTime = now.plusHours((long) this.getMaxHours());
 
-		ParkingPerApp parking = new ParkingPerApp(patentCarAssociated, phoneNumber);
+		ParkingPerApp parking = new ParkingPerApp(patentCarAssociated, now, phoneNumber);
 		currentArea.createParking(phoneNumber, parking);
 
 		StartParkingResponse activity = StartParkingResponse.newBuilder()
@@ -81,6 +83,11 @@ public class AppSEM implements MovementSensor {
 
 		this.activityHistory.add(activity);
 		this.sendNotification(AlertType.START_PARKING, activity.message());
+
+		parkingSystem.notifyMonitors(
+				AlertType.START_PARKING,
+				String.format("A parking lot per app has been created with the patent %s.", patentCarAssociated)
+		);
 	}
 
 	public void endParking() {
@@ -106,6 +113,11 @@ public class AppSEM implements MovementSensor {
 
 		this.activityHistory.add(activity);
 		this.sendNotification(AlertType.END_PARKING, activity.message());
+
+		parkingSystem.notifyMonitors(
+				AlertType.END_PARKING,
+				String.format("One parking lot per app with the patent %s has been finalized.", patentCarAssociated)
+		);
 	}
 
 	public void setCurrentArea(ParkingArea currentArea) {

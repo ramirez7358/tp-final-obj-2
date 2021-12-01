@@ -6,11 +6,6 @@ public class StartParkingResponse implements Activity {
 
 	private LocalTime startHour;
 	private LocalTime maxHour;
-	
-	public StartParkingResponse(LocalTime startHour, LocalTime maxHour) {
-		this.startHour = startHour;
-		this.maxHour = maxHour;
-	}
 
 	public StartParkingResponse(Builder builder) {
 		this.startHour = builder.startHour;

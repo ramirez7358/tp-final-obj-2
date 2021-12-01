@@ -1,5 +1,6 @@
 package com.unq.purchase;
 
+import com.unq.commons.TimeUtil;
 import com.unq.parking.ParkingArea;
 
 import java.math.BigInteger;
@@ -13,10 +14,10 @@ public abstract class Purchase {
     private ParkingArea area;
     private LocalDateTime date;
 
-    public Purchase(ParkingArea area, LocalDateTime date) {
+    public Purchase(ParkingArea area, LocalDateTime localDateTime) {
         this.id = atomicId.incrementAndGet();
         this.area = area;
-        this.date = date;
+        this.date = localDateTime;
     }
 
     public int getId() {

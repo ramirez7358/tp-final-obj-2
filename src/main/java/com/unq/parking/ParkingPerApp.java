@@ -7,8 +7,8 @@ public class ParkingPerApp extends Parking {
     private String phoneNumber;
     private ParkingSystem parkingSystem;
 
-    public ParkingPerApp(String carPatent, String phoneNumber) {
-        super(carPatent);
+    public ParkingPerApp(String carPatent,LocalTime startTime, String phoneNumber) {
+        super(carPatent, startTime);
         this.phoneNumber = phoneNumber;
         this.parkingSystem = ParkingSystem.getInstance();
     }
@@ -16,18 +16,6 @@ public class ParkingPerApp extends Parking {
     @Override
     public LocalTime timeLimit() {
         return parkingSystem.getEndTime();
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public ParkingSystem getParkingSystem() {
-        return parkingSystem;
     }
 
     public void setParkingSystem(ParkingSystem parkingSystem) {

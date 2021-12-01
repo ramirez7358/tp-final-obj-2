@@ -7,8 +7,8 @@ import java.time.LocalTime;
 public class ParkingPerPurchase extends Parking{
     private Purchase purchaseRegistry;
 
-    public ParkingPerPurchase(String carPatent, LocalTime endTime, Purchase purchaseRegistry) {
-        super(carPatent);
+    public ParkingPerPurchase(String carPatent, LocalTime startTime, LocalTime endTime, Purchase purchaseRegistry) {
+        super(carPatent, startTime);
         this.setEndTime(endTime);
         this.purchaseRegistry = purchaseRegistry;
     }
@@ -20,9 +20,5 @@ public class ParkingPerPurchase extends Parking{
 
     public Purchase getPurchaseRegistry() {
         return purchaseRegistry;
-    }
-
-    public void setPurchaseRegistry(Purchase purchaseRegistry) {
-        this.purchaseRegistry = purchaseRegistry;
     }
 }

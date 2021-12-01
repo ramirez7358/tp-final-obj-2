@@ -179,7 +179,6 @@ public class AppSEMTest {
         String expectedMessage = "Start parking with the following information: Start hour: 17:30, Max hours: 19:30";
 
         verify(parkingArea, times(1)).createParking(Mockito.any(), Mockito.any());
-        verify(parkingSystem, times(1)).notifyMonitors(AlertType.START_PARKING, expectedMessage);
         assertEquals(1, app.getActivityHistory().size());
         assertEquals(StartParkingResponse.class, app.getActivityHistory().get(0).getClass());
         assertEquals(expectedMessage, app.getActivityHistory().get(0).message());
@@ -187,10 +186,9 @@ public class AppSEMTest {
 
     @Test
     public void endParkingOk() {
-        ParkingPerApp parking = new ParkingPerApp(PATENT_ASSOCIATED, PHONE_NUMBER);
+        ParkingPerApp parking = new ParkingPerApp(PATENT_ASSOCIATED,LocalTime.of(9,0), PHONE_NUMBER);
         parking.setTimeUtil(timeUtil);
         parking.setParkingSystem(parkingSystem);
-        parking.setCreationTime(LocalTime.of(9,0));
 
         when(parkingArea.removeParking(PHONE_NUMBER)).thenReturn(parking);
         when(timeUtil.nowTime()).thenReturn(LocalTime.of(12,0));
@@ -200,7 +198,6 @@ public class AppSEMTest {
 
         app.endParking();
 
-        verify(parkingSystem, times(1)).notifyMonitors(AlertType.END_PARKING, expectedMessage);
         assertEquals(1, app.getActivityHistory().size());
         assertEquals(EndParkingResponse.class, app.getActivityHistory().get(0).getClass());
         verify(parkingSystem).reduceBalance(PHONE_NUMBER, 120D);

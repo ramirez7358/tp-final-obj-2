@@ -1,8 +1,11 @@
 package com.unq.parking;
 
+import com.unq.alert.AlertType;
 import com.unq.commons.TimeUtil;
 import com.unq.purchase.BalancePurchase;
 import com.unq.purchase.HoursPurchase;
+
+import java.time.LocalTime;
 
 public class PointOfSale {
 
@@ -21,9 +24,13 @@ public class PointOfSale {
 
 		parkingSystem.increaseBalance(phoneNumber, amount);
 		parkingSystem.registryPurchase(purchase);
+		parkingSystem.notifyMonitors(
+				AlertType.BALANCE_BUY,
+				String.format("The number %s made a credit purchase for the value of %s", phoneNumber, amount)
+		);
 	}
 
-	public void buyHours(Integer hours, String patent, String phoneNumber) {
+	public void buyHoursOfParking(Integer hours, String patent, String phoneNumber) {
 		HoursPurchase purchase = new HoursPurchase(area, timeUtil.nowDateTime(), hours, patent);
 
 		double cost = parkingSystem.getPricePerHour() * hours;
@@ -31,29 +38,25 @@ public class PointOfSale {
 		parkingSystem.reduceBalance(phoneNumber,cost);
 		parkingSystem.registryPurchase(purchase);
 
-		ParkingPerPurchase parking = new ParkingPerPurchase(patent, timeUtil.nowTime().plusHours(hours), purchase);
+		LocalTime startTime = timeUtil.nowTime();
+		LocalTime endTime = timeUtil.nowTime().plusHours(hours);
+
+		ParkingPerPurchase parking = new ParkingPerPurchase(patent, startTime, endTime, purchase);
 
 		area.createParking(phoneNumber, parking);
-	}
 
-	public ParkingArea getArea() {
-		return area;
+		parkingSystem.notifyMonitors(
+				AlertType.START_PARKING,
+				String.format("A parking lot for purchase has been created with the patent %s.", patent)
+		);
 	}
 
 	public void setArea(ParkingArea area) {
 		this.area = area;
 	}
 
-	public TimeUtil getTimeUtil() {
-		return timeUtil;
-	}
-
 	public void setTimeUtil(TimeUtil timeUtil) {
 		this.timeUtil = timeUtil;
-	}
-
-	public ParkingSystem getParkingSystem() {
-		return parkingSystem;
 	}
 
 	public void setParkingSystem(ParkingSystem parkingSystem) {

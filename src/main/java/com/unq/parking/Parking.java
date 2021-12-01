@@ -10,10 +10,10 @@ public abstract class Parking {
     private LocalTime endTime;
     private TimeUtil timeUtil;
 
-    public Parking(String carPatent) {
+    public Parking(String carPatent, LocalTime startTime) {
         this.carPatent = carPatent;
         this.timeUtil = new TimeUtil();
-        this.creationTime = timeUtil.nowTime();
+        this.creationTime = startTime;
     }
 
     public Boolean inForce(){
@@ -27,16 +27,8 @@ public abstract class Parking {
         return carPatent;
     }
 
-    public void setCarPatent(String carPatent) {
-        this.carPatent = carPatent;
-    }
-
     public LocalTime getCreationTime() {
         return creationTime;
-    }
-
-    public void setCreationTime(LocalTime creationTime) {
-        this.creationTime = creationTime;
     }
 
     public LocalTime getEndTime() {
@@ -45,10 +37,6 @@ public abstract class Parking {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
-    }
-
-    public TimeUtil getTimeUtil() {
-        return timeUtil;
     }
 
     public void setTimeUtil(TimeUtil timeUtil) {

@@ -47,11 +47,13 @@ public class ParkingSystem {
 	public void subscribeParkingMonitoring(AlertListener alertListener) {
 		this.alertManager.subscribe(AlertType.START_PARKING, alertListener);
 		this.alertManager.subscribe(AlertType.END_PARKING, alertListener);
+		this.alertManager.subscribe(AlertType.BALANCE_BUY, alertListener);
 	}
 
 	public void unsubscribeParkingMonitoring(AlertListener alertListener) {
 		this.alertManager.unsubscribe(AlertType.START_PARKING, alertListener);
 		this.alertManager.unsubscribe(AlertType.END_PARKING, alertListener);
+		this.alertManager.unsubscribe(AlertType.BALANCE_BUY, alertListener);
 	}
 
 	public void notifyMonitors(AlertType alertType, String data) {
@@ -68,18 +70,23 @@ public class ParkingSystem {
 					.entrySet()
 					.stream()
 					.filter(x -> x.getValue().inForce())
-					.forEach(x -> {
-						Parking parking = a.removeParking(x.getKey());
-						String phoneNumber = a.getPhoneNumberByPatent(parking.getCarPatent());
-
-						long minutes = ChronoUnit.MINUTES.between(parking.getCreationTime(), timeUtil.nowTime());
-
-						double cost = minutes * (pricePerHour/60);
-
-						this.reduceBalance(phoneNumber, cost);
-					})
+					.forEach(x -> this.forceEndParking(x.getKey(), a))
 			);
 		}
+	}
+
+	private void forceEndParking(String phoneNumber, ParkingArea area) {
+		Parking parking = area.removeParking(phoneNumber);
+
+		long minutes = timeUtil.calculateTimeFrom(parking.getCreationTime());
+
+		double cost = this.getCost(minutes);
+
+		this.reduceBalance(phoneNumber, cost);
+	}
+
+	public double getCost(long minutes) {
+		return minutes * (pricePerHour/60);
 	}
 
 	public void registryViolation(Violation violation) {

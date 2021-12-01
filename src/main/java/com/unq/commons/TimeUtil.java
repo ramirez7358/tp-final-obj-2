@@ -2,15 +2,16 @@ package com.unq.commons;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class TimeUtil {
 
-    public LocalTime nowTime() {
-        return LocalTime.now();
+    public Long calculateTimeFrom(LocalTime localTime) {
+        return ChronoUnit.MINUTES.between(localTime, this.nowTime());
     }
 
-    public LocalTime timeOf(int hour, int minutes, int seconds){
-        return LocalTime.of(hour,minutes,seconds);
+    public LocalTime nowTime() {
+        return LocalTime.now();
     }
 
     public LocalDateTime nowDateTime() {

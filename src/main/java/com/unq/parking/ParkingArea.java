@@ -7,8 +7,6 @@ import com.unq.app.inspector.Inspector;
 import com.unq.exceptions.CustomException;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class ParkingArea {
