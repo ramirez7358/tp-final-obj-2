@@ -9,7 +9,6 @@ import com.unq.exceptions.CustomException;
 import com.unq.purchase.Purchase;
 
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public class ParkingSystem {
@@ -24,16 +23,18 @@ public class ParkingSystem {
 	private double pricePerHour;
 
 	private static ParkingSystem instance;
-	private final AlertManager alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
+	private AlertManager alertManager ;
 
 	private ParkingSystem() {
 		this.balances = new HashMap<>();
 		this.areas = new ArrayList<>();
 		this.violations = new ArrayList<>();
+		this.shoppingRecord = new ArrayList<>();
 		this.timeUtil = new TimeUtil();
 		this.startTime = LocalTime.of(7,0,0);
 		this.endTime = LocalTime.of(20,0,0);
 		this.pricePerHour = 40;
+		this.alertManager = new AlertManager(AlertType.START_PARKING, AlertType.END_PARKING);
 	}
 
 	public static ParkingSystem getInstance() {
@@ -62,6 +63,10 @@ public class ParkingSystem {
 
 	public void registryPurchase(Purchase purchase) {
 		this.shoppingRecord.add(purchase);
+	}
+
+	public void addParkingArea(ParkingArea area) {
+		this.areas.add(area);
 	}
 
 	public void finalizeAllCurrentParking() {
@@ -97,6 +102,18 @@ public class ParkingSystem {
 		return this.balances.getOrDefault(phoneNumber, 0D);
 	}
 
+	public void changePricePerHour(Double newPrice) {
+		this.pricePerHour = newPrice;
+	}
+
+	public void changeStartTime(LocalTime startTime) {
+		this.startTime = startTime;
+	}
+
+	public void changeEndTime(LocalTime endTime) {
+		this.endTime = endTime;
+	}
+
 	public void increaseBalance(String phoneNumber, Double amount) {
 		if(balances.containsKey(phoneNumber)) {
 			Double balance = balances.get(phoneNumber);
@@ -115,40 +132,12 @@ public class ParkingSystem {
 		}
 	}
 
-	public Map<String, Double> getBalances() {
-		return balances;
-	}
-
-	public void setBalances(Map<String, Double> balances) {
-		this.balances = balances;
-	}
-
-	public List<ParkingArea> getAreas() {
-		return areas;
-	}
-
-	public void setAreas(List<ParkingArea> areas) {
-		this.areas = areas;
-	}
-
 	public List<Violation> getViolations() {
 		return violations;
 	}
 
-	public void setViolations(List<Violation> violations) {
-		this.violations = violations;
-	}
-
 	public List<Purchase> getShoppingRecord() {
 		return shoppingRecord;
-	}
-
-	public void setShoppingRecord(List<Purchase> shoppingRecord) {
-		this.shoppingRecord = shoppingRecord;
-	}
-
-	public TimeUtil getTimeUtil() {
-		return timeUtil;
 	}
 
 	public void setTimeUtil(TimeUtil timeUtil) {
@@ -159,31 +148,15 @@ public class ParkingSystem {
 		return startTime;
 	}
 
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
 	public LocalTime getEndTime() {
 		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
 	}
 
 	public double getPricePerHour() {
 		return pricePerHour;
 	}
 
-	public void setPricePerHour(double pricePerHour) {
-		this.pricePerHour = pricePerHour;
-	}
-
-	public static void setInstance(ParkingSystem instance) {
-		ParkingSystem.instance = instance;
-	}
-
-	public AlertManager getAlertManager() {
-		return alertManager;
+	public void setAlertManager(AlertManager alertManager) {
+		this.alertManager = alertManager;
 	}
 }

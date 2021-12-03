@@ -84,8 +84,9 @@ public class ParkingTest {
     public void parkingPerAppOutOfTime() {
         ParkingPerApp parking = new ParkingPerApp(PATENT_ASSOCIATED, LocalTime.of(12,0), PHONE_NUMBER);
         parking.setParkingSystem(parkingSystem);
+        parking.setTimeUtil(timeUtil);
 
-        when(timeUtil.nowTime()).thenReturn(LocalTime.of(18,0));
+        when(timeUtil.nowTime()).thenReturn(LocalTime.of(20,0));
         when(parkingSystem.getEndTime()).thenReturn(LocalTime.of(20,0));
 
         assertFalse(parking.inForce());

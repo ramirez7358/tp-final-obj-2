@@ -59,9 +59,8 @@ public class AppSEM implements MovementSensor {
 	}
 
 	// Metodo para notificar al usuario
-	public void sendNotification(AlertType alertType, String data) {
+	public void sendNotification(String data) {
 		System.out.println(data);
-		//this.parkingSystem.notifyMonitors(alertType, data);
 	}
 
 	public void startParking() {
@@ -82,7 +81,6 @@ public class AppSEM implements MovementSensor {
 				.build();
 
 		this.activityHistory.add(activity);
-		this.sendNotification(AlertType.START_PARKING, activity.message());
 
 		parkingSystem.notifyMonitors(
 				AlertType.START_PARKING,
@@ -112,7 +110,6 @@ public class AppSEM implements MovementSensor {
 				.build();
 
 		this.activityHistory.add(activity);
-		this.sendNotification(AlertType.END_PARKING, activity.message());
 
 		parkingSystem.notifyMonitors(
 				AlertType.END_PARKING,
@@ -120,7 +117,7 @@ public class AppSEM implements MovementSensor {
 		);
 	}
 
-	public void setCurrentArea(ParkingArea currentArea) {
+	public void changeArea(ParkingArea currentArea) {
 		this.currentArea = currentArea;
 	}
 

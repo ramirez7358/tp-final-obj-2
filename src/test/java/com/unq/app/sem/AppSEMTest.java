@@ -1,6 +1,5 @@
 package com.unq.app.sem;
 
-import com.unq.alert.AlertType;
 import com.unq.app.sem.activities.EndParkingResponse;
 import com.unq.app.sem.activities.StartParkingResponse;
 import com.unq.app.sem.mode.AutomaticModeStrategy;
@@ -50,7 +49,7 @@ public class AppSEMTest {
 
         app = new AppSEM(PHONE_NUMBER, PATENT_ASSOCIATED, drivingState);
         app.setAppMode(manualModeStrategy);
-        app.setCurrentArea(parkingArea);
+        app.changeArea(parkingArea);
         app.setParkingSystem(parkingSystem);
         app.setTimeUtil(timeUtil);
     }
